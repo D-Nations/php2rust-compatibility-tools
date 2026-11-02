@@ -18,7 +18,9 @@ impl Key {
     /// else (`"05"`, `"-0"`, `"1.5"`) stays a string key.
     pub fn from_bytes(bytes: &[u8]) -> Key {
         if is_canonical_int(bytes)
-            && let Some(i) = std::str::from_utf8(bytes).ok().and_then(|s| s.parse::<i64>().ok())
+            && let Some(i) = std::str::from_utf8(bytes)
+                .ok()
+                .and_then(|s| s.parse::<i64>().ok())
         {
             return Key::Int(i);
         }
@@ -30,6 +32,13 @@ impl Key {
             Key::Int(i) => Value::Int(*i),
             Key::Str(s) => Value::Str(s.clone()),
         }
+    }
+}
+
+impl From<&str> for Key {
+    /// A normalized key from a string literal: `Key::from("5") == Key::Int(5)`.
+    fn from(s: &str) -> Self {
+        Key::from_bytes(s.as_bytes())
     }
 }
 
@@ -208,7 +217,10 @@ mod tests {
         assert!(matches!(Key::from_bytes(b"05"), Key::Str(_)));
         assert!(matches!(Key::from_bytes(b"-0"), Key::Str(_)));
         assert!(matches!(Key::from_bytes(b""), Key::Str(_)));
-        assert!(matches!(Key::from_bytes(b"9223372036854775808"), Key::Str(_)));
+        assert!(matches!(
+            Key::from_bytes(b"9223372036854775808"),
+            Key::Str(_)
+        ));
     }
 
     #[test]

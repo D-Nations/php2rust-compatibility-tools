@@ -74,7 +74,11 @@ impl Value {
                 Numericity::Numeric(Number::Int(i)) | Numericity::Leading(Number::Int(i)) => i,
                 // Strings saturate rather than wrap.
                 Numericity::Numeric(Number::Float(f)) | Numericity::Leading(Number::Float(f)) => {
-                    if f.is_nan() { 0 } else { f as i64 }
+                    if f.is_nan() {
+                        0
+                    } else {
+                        f as i64
+                    }
                 }
                 Numericity::NonNumeric => 0,
             },

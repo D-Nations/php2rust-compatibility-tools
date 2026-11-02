@@ -4,7 +4,10 @@ use std::fmt;
 #[derive(Clone, Debug, PartialEq)]
 pub enum PhpError {
     /// An uncaught `Throwable`, identified by class name until classes land.
-    Thrown { class: &'static str, message: String },
+    Thrown {
+        class: &'static str,
+        message: String,
+    },
     /// `exit` / `die`. Not an error: it unwinds the script with a status code.
     Exit(i32),
 }
@@ -13,7 +16,10 @@ pub type PhpResult<T> = Result<T, PhpError>;
 
 impl PhpError {
     fn thrown(class: &'static str, message: impl Into<String>) -> Self {
-        PhpError::Thrown { class, message: message.into() }
+        PhpError::Thrown {
+            class,
+            message: message.into(),
+        }
     }
 
     pub fn error(message: impl Into<String>) -> Self {

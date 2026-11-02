@@ -67,7 +67,10 @@ impl Context {
     /// `define()` / `const`. Returns false (and warns) if already defined.
     pub fn define(&mut self, name: &[u8], value: Value) -> bool {
         if self.constants.contains_key(name) {
-            self.warn(format!("Constant {} already defined", String::from_utf8_lossy(name)));
+            self.warn(format!(
+                "Constant {} already defined",
+                String::from_utf8_lossy(name)
+            ));
             return false;
         }
         self.constants.insert(name.to_vec(), value);
@@ -75,10 +78,12 @@ impl Context {
     }
 
     pub fn constant(&self, name: &[u8]) -> PhpResult<Value> {
-        self.constants
-            .get(name)
-            .cloned()
-            .ok_or_else(|| PhpError::error(format!("Undefined constant \"{}\"", String::from_utf8_lossy(name))))
+        self.constants.get(name).cloned().ok_or_else(|| {
+            PhpError::error(format!(
+                "Undefined constant \"{}\"",
+                String::from_utf8_lossy(name)
+            ))
+        })
     }
 
     /// For `include_once` / `require_once`: true the first time `file` is seen.

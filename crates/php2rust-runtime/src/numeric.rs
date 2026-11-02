@@ -110,7 +110,8 @@ pub fn float_to_int(f: f64) -> i64 {
     if !f.is_finite() {
         return 0;
     }
-    if f >= -9.223_372_036_854_775_808e18 && f < 9.223_372_036_854_775_808e18 {
+    // i64::MIN and i64::MAX convert to exactly -2^63 and 2^63.
+    if (i64::MIN as f64..i64::MAX as f64).contains(&f) {
         return f as i64;
     }
     let two64 = 18_446_744_073_709_551_616.0_f64;
@@ -136,7 +137,7 @@ mod tests {
         assert_eq!(classify(b"0x1A"), Numericity::Leading(Number::Int(0)));
         assert_eq!(
             classify(b"9223372036854775808"),
-            Numericity::Numeric(Number::Float(9.223372036854775808e18))
+            Numericity::Numeric(Number::Float(i64::MAX as f64))
         );
     }
 

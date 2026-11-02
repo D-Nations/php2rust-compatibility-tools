@@ -8,10 +8,12 @@
 #![forbid(unsafe_code)]
 
 mod array;
+pub mod builtins;
 mod context;
 mod error;
 mod format;
 mod numeric;
+pub mod rt;
 mod string;
 mod value;
 
@@ -23,6 +25,8 @@ pub use value::Value;
 
 /// Everything generated code needs, imported with `use php_rt::prelude::*;`.
 pub mod prelude {
+    pub use crate::builtins;
+    pub use crate::rt;
     pub use crate::{Context, Key, PhpArray, PhpError, PhpResult, PhpString, Value};
 }
 

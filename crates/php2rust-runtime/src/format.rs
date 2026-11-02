@@ -21,7 +21,11 @@ pub fn php_gcvt(value: f64, precision: usize) -> String {
         return "NAN".into();
     }
     if value.is_infinite() {
-        return if value < 0.0 { "-INF".into() } else { "INF".into() };
+        return if value < 0.0 {
+            "-INF".into()
+        } else {
+            "INF".into()
+        };
     }
     let ndigit = if precision == 0 { 17 } else { precision } as i32;
     let sci = if precision == 0 {
@@ -72,7 +76,11 @@ pub fn var_dump(value: &Value, indent: usize, out: &mut Vec<u8>) {
     out.extend(std::iter::repeat_n(b' ', indent));
     match value {
         Value::Null => out.extend_from_slice(b"NULL\n"),
-        Value::Bool(b) => out.extend_from_slice(if *b { b"bool(true)\n" } else { b"bool(false)\n" }),
+        Value::Bool(b) => out.extend_from_slice(if *b {
+            b"bool(true)\n"
+        } else {
+            b"bool(false)\n"
+        }),
         Value::Int(i) => out.extend_from_slice(format!("int({i})\n").as_bytes()),
         Value::Float(f) => out.extend_from_slice(format!("float({})\n", float_repr(*f)).as_bytes()),
         Value::Str(s) => {
@@ -139,7 +147,7 @@ mod tests {
         assert_eq!(float_to_string(-0.0001), "-0.0001");
         assert_eq!(float_to_string(0.00001), "1.0E-5");
         assert_eq!(float_to_string(-0.0), "-0");
-        assert_eq!(float_to_string(9.223372036854775808e18), "9.2233720368548E+18");
+        assert_eq!(float_to_string(i64::MAX as f64), "9.2233720368548E+18");
         assert_eq!(float_to_string(f64::INFINITY), "INF");
     }
 
@@ -149,6 +157,6 @@ mod tests {
         assert_eq!(float_repr(1.0), "1");
         assert_eq!(float_repr(1.5), "1.5");
         // Shortest round-trip digits (zend_dtoa mode 0), so 16 digits here, not 17.
-        assert_eq!(float_repr(9.223372036854775808e18), "9.223372036854776E+18");
+        assert_eq!(float_repr(i64::MAX as f64), "9.223372036854776E+18");
     }
 }

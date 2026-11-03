@@ -785,6 +785,26 @@ pub fn foreach_source(v: &Value, ctx: &mut Context) -> PhpArray {
 
 // ------------------------------------------------------- function calls
 
+/// Whether a typed parameter accepts `null`: declared `?int`, or defaulting
+/// to `null`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Null {
+    /// `null` is passed through.
+    Allowed,
+    /// `null` is a `TypeError`.
+    Rejected,
+}
+
+/// How scalars are checked against parameter types: PHP's
+/// `declare(strict_types=1)` or the default coercive mode.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum TypeMode {
+    /// `declare(strict_types=1)`: only exact types (and int to float).
+    Strict,
+    /// PHP's default: scalars are converted where PHP allows it.
+    Coercive,
+}
+
 /// The declared type of a parameter, for coercion at call time.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ParamType {
@@ -819,17 +839,16 @@ pub fn too_few_arguments(function: &str, passed: usize, required: usize, exact: 
 pub fn coerce_param(
     v: Value,
     ty: ParamType,
-    nullable: bool,
-    strict: bool,
+    null: Null,
+    mode: TypeMode,
     function: &str,
     position: usize,
     name: &str,
 ) -> PhpResult<Value> {
     let mismatch = |v: &Value| {
-        let expected = if nullable {
-            format!("?{}", ty.name())
-        } else {
-            ty.name().to_string()
+        let expected = match null {
+            Null::Allowed => format!("?{}", ty.name()),
+            Null::Rejected => ty.name().to_string(),
         };
         PhpError::type_error(format!(
             "{function}(): Argument #{position} (${name}) must be of type {expected}, {} given",
@@ -837,7 +856,10 @@ pub fn coerce_param(
         ))
     };
     if v.is_null() {
-        return if nullable { Ok(v) } else { Err(mismatch(&v)) };
+        return match null {
+            Null::Allowed => Ok(v),
+            Null::Rejected => Err(mismatch(&v)),
+        };
     }
     let coerced = match (ty, &v) {
         (ParamType::Int, Value::Int(_))
@@ -846,7 +868,7 @@ pub fn coerce_param(
         | (ParamType::Bool, Value::Bool(_))
         | (ParamType::Array, Value::Array(_)) => Some(v.clone()),
         (ParamType::Float, Value::Int(i)) => Some(Value::Float(*i as f64)),
-        _ if strict => None,
+        _ if mode == TypeMode::Strict => None,
         (ParamType::Int, Value::Float(f)) if f.fract() == 0.0 && f.is_finite() => {
             Some(Value::Int(*f as i64))
         }

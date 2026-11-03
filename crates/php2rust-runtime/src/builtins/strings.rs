@@ -288,13 +288,15 @@ fn char_mask(list: &[u8]) -> [bool; 256] {
     mask
 }
 
-fn trim_impl(
-    func: &str,
-    args: &[Value],
-    left: bool,
-    right: bool,
-    ctx: &mut Context,
-) -> PhpResult<Value> {
+/// Which ends of a string `trim_impl` strips.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Ends {
+    Both,
+    Start,
+    End,
+}
+
+fn trim_impl(func: &str, args: &[Value], ends: Ends, ctx: &mut Context) -> PhpResult<Value> {
     let s = str_arg(func, args, 0, "string", ctx)?;
     let mask = match args.get(1) {
         Some(_) => char_mask(str_arg(func, args, 1, "characters", ctx)?.as_bytes()),
@@ -303,12 +305,12 @@ fn trim_impl(
     let b = s.as_bytes();
     let mut start = 0;
     let mut end = b.len();
-    if left {
+    if ends != Ends::End {
         while start < end && mask[b[start] as usize] {
             start += 1;
         }
     }
-    if right {
+    if ends != Ends::Start {
         while end > start && mask[b[end - 1] as usize] {
             end -= 1;
         }
@@ -317,15 +319,15 @@ fn trim_impl(
 }
 
 pub fn trim(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    trim_impl("trim", args, true, true, ctx)
+    trim_impl("trim", args, Ends::Both, ctx)
 }
 
 pub fn ltrim(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    trim_impl("ltrim", args, true, false, ctx)
+    trim_impl("ltrim", args, Ends::Start, ctx)
 }
 
 pub fn rtrim(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    trim_impl("rtrim", args, false, true, ctx)
+    trim_impl("rtrim", args, Ends::End, ctx)
 }
 
 pub fn implode(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
@@ -614,12 +616,27 @@ pub fn printf(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::from(out.len()))
 }
 
-fn pad_to(body: Vec<u8>, width: usize, pad: u8, left_align: bool, numeric: bool) -> Vec<u8> {
+/// Which side of the field a `printf` conversion sits on.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Align {
+    Left,
+    Right,
+}
+
+/// What a `printf` conversion produced. A number keeps its sign in front of
+/// zero padding (`-0042`); text does not.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Content {
+    Number,
+    Text,
+}
+
+fn pad_to(body: Vec<u8>, width: usize, pad: u8, align: Align, content: Content) -> Vec<u8> {
     if body.len() >= width {
         return body;
     }
     let fill = width - body.len();
-    if left_align {
+    if align == Align::Left {
         let mut out = body;
         out.extend(std::iter::repeat_n(pad, fill));
         return out;
@@ -627,7 +644,7 @@ fn pad_to(body: Vec<u8>, width: usize, pad: u8, left_align: bool, numeric: bool)
     let mut out = Vec::with_capacity(width);
     let mut body = body.as_slice();
     // Zero padding goes between the sign and the digits: "-0042".
-    if numeric && pad == b'0' && matches!(body.first(), Some(b'-' | b'+')) {
+    if content == Content::Number && pad == b'0' && matches!(body.first(), Some(b'-' | b'+')) {
         out.push(body[0]);
         body = &body[1..];
     }
@@ -684,10 +701,10 @@ fn format_printf(format: &[u8], args: &[Value], ctx: &mut Context) -> PhpResult<
             argnum = Some(n - 1);
             i = digits_end + 1;
         }
-        let (mut left_align, mut plus, mut pad) = (false, false, b' ');
+        let (mut align, mut plus, mut pad) = (Align::Right, false, b' ');
         loop {
             match at(i) {
-                Some(b'-') => left_align = true,
+                Some(b'-') => align = Align::Left,
                 Some(b'+') => plus = true,
                 Some(b'0') => pad = b'0',
                 Some(b' ') => pad = b' ',
@@ -738,24 +755,27 @@ fn format_printf(format: &[u8], args: &[Value], ctx: &mut Context) -> PhpResult<
                 s.into_bytes()
             }
         };
-        let (body, numeric) = match spec {
+        let (body, content) = match spec {
             b's' => {
                 let mut s = rt::to_str(arg, ctx).as_bytes().to_vec();
                 if let Some(p) = precision {
                     s.truncate(p);
                 }
-                (s, false)
+                (s, Content::Text)
             }
             b'd' => {
                 let n = arg.to_int();
-                (signed(n.to_string(), n >= 0), true)
+                (signed(n.to_string(), n >= 0), Content::Number)
             }
-            b'u' => ((arg.to_int() as u64).to_string().into_bytes(), true),
+            b'u' => (
+                (arg.to_int() as u64).to_string().into_bytes(),
+                Content::Number,
+            ),
             b'f' | b'F' => {
                 let f = arg.to_float();
                 (
                     signed(format!("{:.*}", precision.unwrap_or(6), f), f >= 0.0),
-                    true,
+                    Content::Number,
                 )
             }
             b'e' | b'E' => {
@@ -765,7 +785,7 @@ fn format_printf(format: &[u8], args: &[Value], ctx: &mut Context) -> PhpResult<
                         php_exponential(f, precision.unwrap_or(6), spec == b'E'),
                         f >= 0.0,
                     ),
-                    true,
+                    Content::Number,
                 )
             }
             b'g' | b'G' => {
@@ -779,12 +799,24 @@ fn format_printf(format: &[u8], args: &[Value], ctx: &mut Context) -> PhpResult<
                 if spec == b'g' {
                     s = s.replace('E', "e");
                 }
-                (signed(s, f >= 0.0), true)
+                (signed(s, f >= 0.0), Content::Number)
             }
-            b'x' => (format!("{:x}", arg.to_int() as u64).into_bytes(), false),
-            b'X' => (format!("{:X}", arg.to_int() as u64).into_bytes(), false),
-            b'o' => (format!("{:o}", arg.to_int() as u64).into_bytes(), false),
-            b'b' => (format!("{:b}", arg.to_int() as u64).into_bytes(), false),
+            b'x' => (
+                format!("{:x}", arg.to_int() as u64).into_bytes(),
+                Content::Text,
+            ),
+            b'X' => (
+                format!("{:X}", arg.to_int() as u64).into_bytes(),
+                Content::Text,
+            ),
+            b'o' => (
+                format!("{:o}", arg.to_int() as u64).into_bytes(),
+                Content::Text,
+            ),
+            b'b' => (
+                format!("{:b}", arg.to_int() as u64).into_bytes(),
+                Content::Text,
+            ),
             b'c' => {
                 out.push(arg.to_int() as u8);
                 continue;
@@ -796,7 +828,7 @@ fn format_printf(format: &[u8], args: &[Value], ctx: &mut Context) -> PhpResult<
                 )));
             }
         };
-        out.extend(pad_to(body, width, pad, left_align, numeric));
+        out.extend(pad_to(body, width, pad, align, content));
     }
     Ok(out)
 }

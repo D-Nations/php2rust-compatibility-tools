@@ -353,33 +353,59 @@ fn compare_with_flags(a: &Value, b: &Value, flags: i64) -> Ordering {
     }
 }
 
+/// What a sort compares.
+#[derive(Clone, Copy)]
+enum SortBy {
+    Value,
+    Key,
+}
+
+/// The direction of a sort.
+#[derive(Clone, Copy)]
+enum Order {
+    Ascending,
+    Descending,
+}
+
+/// Whether sorted values keep their keys or are renumbered from 0.
+#[derive(Clone, Copy)]
+enum Keys {
+    Keep,
+    Renumber,
+}
+
 /// Stable sort (PHP 8 sorts are stable) of the array's entries.
 fn sort_entries(
     target: &mut Value,
     func: &str,
     args: &[Value],
     ctx: &mut Context,
-    by_key: bool,
-    reverse: bool,
-    keep_keys: bool,
+    by: SortBy,
+    order: Order,
+    keys: Keys,
 ) -> PhpResult<Value> {
     let flags = sort_flags(func, args, ctx)?;
     let a = array_target(func, target, "array")?;
     let mut entries: Vec<(Key, Value)> = a.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
     entries.sort_by(|(k1, v1), (k2, v2)| {
-        let ord = if by_key {
-            compare_with_flags(&k1.to_value(), &k2.to_value(), flags)
-        } else {
-            compare_with_flags(v1, v2, flags)
+        let ord = match by {
+            SortBy::Key => compare_with_flags(&k1.to_value(), &k2.to_value(), flags),
+            SortBy::Value => compare_with_flags(v1, v2, flags),
         };
-        if reverse { ord.reverse() } else { ord }
+        match order {
+            Order::Ascending => ord,
+            Order::Descending => ord.reverse(),
+        }
     });
     let mut out = PhpArray::new();
     for (k, v) in entries {
-        if keep_keys {
-            out.insert(k, v);
-        } else {
-            out.push(v);
+        match keys {
+            Keys::Keep => {
+                out.insert(k, v);
+            }
+            Keys::Renumber => {
+                out.push(v);
+            }
         }
     }
     *a = out;
@@ -387,27 +413,75 @@ fn sort_entries(
 }
 
 pub fn sort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    sort_entries(target, "sort", args, ctx, false, false, false)
+    sort_entries(
+        target,
+        "sort",
+        args,
+        ctx,
+        SortBy::Value,
+        Order::Ascending,
+        Keys::Renumber,
+    )
 }
 
 pub fn rsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    sort_entries(target, "rsort", args, ctx, false, true, false)
+    sort_entries(
+        target,
+        "rsort",
+        args,
+        ctx,
+        SortBy::Value,
+        Order::Descending,
+        Keys::Renumber,
+    )
 }
 
 pub fn asort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    sort_entries(target, "asort", args, ctx, false, false, true)
+    sort_entries(
+        target,
+        "asort",
+        args,
+        ctx,
+        SortBy::Value,
+        Order::Ascending,
+        Keys::Keep,
+    )
 }
 
 pub fn arsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    sort_entries(target, "arsort", args, ctx, false, true, true)
+    sort_entries(
+        target,
+        "arsort",
+        args,
+        ctx,
+        SortBy::Value,
+        Order::Descending,
+        Keys::Keep,
+    )
 }
 
 pub fn ksort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    sort_entries(target, "ksort", args, ctx, true, false, true)
+    sort_entries(
+        target,
+        "ksort",
+        args,
+        ctx,
+        SortBy::Key,
+        Order::Ascending,
+        Keys::Keep,
+    )
 }
 
 pub fn krsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    sort_entries(target, "krsort", args, ctx, true, true, true)
+    sort_entries(
+        target,
+        "krsort",
+        args,
+        ctx,
+        SortBy::Key,
+        Order::Descending,
+        Keys::Keep,
+    )
 }
 
 // ------------------------------------------------- stack and queue ops

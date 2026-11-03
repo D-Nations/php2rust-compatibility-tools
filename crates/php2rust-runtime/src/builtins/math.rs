@@ -1,11 +1,10 @@
 use std::cmp::Ordering;
 
 use super::{array_arg, float_arg, int_arg, number_arg};
-use crate::Value;
 use crate::context::Context;
 use crate::error::{PhpError, PhpResult};
 use crate::numeric::Number;
-use crate::rt;
+use crate::{Value, rt};
 
 /// PHP's `round()`: pre-rounds to 15 significant digits so that values like
 /// 1.005 (stored as 1.00499999...) round the way a person expects, then

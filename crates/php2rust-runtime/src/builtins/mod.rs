@@ -15,10 +15,9 @@ pub use strings::*;
 
 use crate::context::Context;
 use crate::error::{PhpError, PhpResult};
-use crate::format;
 use crate::numeric::{self, Number, Numericity};
 use crate::string::PhpString;
-use crate::{PhpArray, Value};
+use crate::{PhpArray, Value, format};
 
 /// How the transpiler should call a builtin.
 pub struct Builtin {

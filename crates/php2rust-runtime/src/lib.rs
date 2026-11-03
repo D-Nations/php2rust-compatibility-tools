@@ -25,9 +25,7 @@ pub use value::Value;
 
 /// Everything generated code needs, imported with `use php_rt::prelude::*;`.
 pub mod prelude {
-    pub use crate::builtins;
-    pub use crate::rt;
-    pub use crate::{Context, Key, PhpArray, PhpError, PhpResult, PhpString, Value};
+    pub use crate::{Context, Key, PhpArray, PhpError, PhpResult, PhpString, Value, builtins, rt};
 }
 
 /// Runs a generated script as a CLI program: executes it, writes its output to

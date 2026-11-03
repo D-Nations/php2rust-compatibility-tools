@@ -2,9 +2,7 @@ use super::math::php_round;
 use super::{bool_arg, float_arg, int_arg, str_arg};
 use crate::context::Context;
 use crate::error::{PhpError, PhpResult};
-use crate::format;
-use crate::rt;
-use crate::{PhpArray, Value};
+use crate::{PhpArray, Value, format, rt};
 
 fn bytes(v: Vec<u8>) -> PhpResult<Value> {
     Ok(Value::from(v))

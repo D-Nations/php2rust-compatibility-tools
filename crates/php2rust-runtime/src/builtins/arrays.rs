@@ -4,8 +4,7 @@ use super::{array_arg, array_target, bool_arg, int_arg, number_arg};
 use crate::context::Context;
 use crate::error::{PhpError, PhpResult};
 use crate::numeric::{self, Number, Numericity};
-use crate::rt;
-use crate::{Key, PhpArray, Value};
+use crate::{Key, PhpArray, Value, rt};
 
 fn count_recursive(a: &PhpArray) -> usize {
     a.values()

@@ -1,3 +1,8 @@
+#![expect(
+    clippy::disallowed_types,
+    reason = "PHP strings have value semantics: copies share storage through Rc and copy on write (Google guide: avoid Rc and Arc, unless the alternative is unreasonably complex)"
+)]
+
 use std::fmt;
 use std::rc::Rc;
 

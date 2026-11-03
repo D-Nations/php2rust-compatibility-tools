@@ -23,7 +23,9 @@ use crate::{PhpArray, Value, format, rt};
 
 /// How the transpiler should call a builtin.
 pub struct Builtin {
+    /// The PHP function name, in lowercase.
     pub name: &'static str,
+    /// Calls with fewer arguments are refused at conversion time.
     pub min_args: usize,
     /// `None` for variadic functions.
     pub max_args: Option<usize>,
@@ -58,6 +60,7 @@ const fn by_ref(name: &'static str, min_args: usize, max_args: Option<usize>) ->
     }
 }
 
+/// Every builtin the transpiler can call, with its arity.
 pub const BUILTINS: &[Builtin] = &[
     // output
     variadic("var_dump", 1),
@@ -167,11 +170,15 @@ pub fn lookup(name: &str) -> Option<&'static Builtin> {
 /// A predefined constant's value, inlined by the transpiler.
 #[derive(Clone, Copy, Debug)]
 pub enum Constant {
+    /// An integer constant such as `PHP_INT_MAX`.
     Int(i64),
+    /// A float constant such as `M_PI`.
     Float(f64),
+    /// A string constant such as `PHP_EOL`.
     Str(&'static str),
 }
 
+/// Every predefined constant, by name.
 pub const CONSTANTS: &[(&str, Constant)] = &[
     ("PHP_EOL", Constant::Str("\n")),
     ("PHP_INT_MAX", Constant::Int(i64::MAX)),
@@ -346,6 +353,7 @@ pub(crate) fn array_target<'a>(
 
 // ---------------------------------------------------------------- output
 
+/// PHP's [`var_dump()`](https://www.php.net/manual/en/function.var-dump.php).
 pub fn var_dump(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let mut out = Vec::new();
     for v in args {
@@ -355,6 +363,7 @@ pub fn var_dump(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Null)
 }
 
+/// PHP's [`print_r()`](https://www.php.net/manual/en/function.print-r.php).
 pub fn print_r(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let mut out = Vec::new();
     format::print_r(&args[0], 0, &mut out);
@@ -367,11 +376,13 @@ pub fn print_r(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
 
 // ------------------------------------------------------------- constants
 
+/// PHP's [`define()`](https://www.php.net/manual/en/function.define.php).
 pub fn define(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let name = str_arg("define", args, 0, "constant_name", ctx)?;
     Ok(Value::Bool(ctx.define(name.as_bytes(), args[1].clone())))
 }
 
+/// PHP's [`defined()`](https://www.php.net/manual/en/function.defined.php).
 pub fn defined(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let name = str_arg("defined", args, 0, "constant_name", ctx)?;
     let known = ctx.constant(name.as_bytes()).is_ok()
@@ -379,6 +390,7 @@ pub fn defined(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(known))
 }
 
+/// PHP's [`constant()`](https://www.php.net/manual/en/function.constant.php).
 pub fn constant(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let name = str_arg("constant", args, 0, "name", ctx)?;
     match predefined_constant(&name.to_string_lossy()) {
@@ -391,10 +403,12 @@ pub fn constant(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
 
 // ----------------------------------------------------------------- types
 
+/// PHP's [`gettype()`](https://www.php.net/manual/en/function.gettype.php).
 pub fn gettype(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::from(args[0].gettype()))
 }
 
+/// PHP's [`intval()`](https://www.php.net/manual/en/function.intval.php).
 pub fn intval(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let base = if args.len() > 1 {
         int_arg("intval", args, 1, "base", ctx)?
@@ -431,46 +445,57 @@ pub fn intval(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     }
 }
 
+/// PHP's [`floatval()`](https://www.php.net/manual/en/function.floatval.php).
 pub fn floatval(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Float(args[0].to_float()))
 }
 
+/// PHP's [`strval()`](https://www.php.net/manual/en/function.strval.php).
 pub fn strval(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(rt::cast_string(&args[0], ctx))
 }
 
+/// PHP's [`boolval()`](https://www.php.net/manual/en/function.boolval.php).
 pub fn boolval(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(args[0].to_bool()))
 }
 
+/// PHP's [`is_int()`](https://www.php.net/manual/en/function.is-int.php).
 pub fn is_int(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(matches!(args[0], Value::Int(_))))
 }
 
+/// PHP's [`is_integer()`](https://www.php.net/manual/en/function.is-integer.php).
 pub fn is_integer(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     is_int(args, ctx)
 }
 
+/// PHP's [`is_float()`](https://www.php.net/manual/en/function.is-float.php).
 pub fn is_float(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(matches!(args[0], Value::Float(_))))
 }
 
+/// PHP's [`is_string()`](https://www.php.net/manual/en/function.is-string.php).
 pub fn is_string(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(matches!(args[0], Value::Str(_))))
 }
 
+/// PHP's [`is_bool()`](https://www.php.net/manual/en/function.is-bool.php).
 pub fn is_bool(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(matches!(args[0], Value::Bool(_))))
 }
 
+/// PHP's [`is_array()`](https://www.php.net/manual/en/function.is-array.php).
 pub fn is_array(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(matches!(args[0], Value::Array(_))))
 }
 
+/// PHP's [`is_null()`](https://www.php.net/manual/en/function.is-null.php).
 pub fn is_null(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(args[0].is_null()))
 }
 
+/// PHP's [`is_scalar()`](https://www.php.net/manual/en/function.is-scalar.php).
 pub fn is_scalar(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(matches!(
         args[0],
@@ -478,6 +503,7 @@ pub fn is_scalar(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     )))
 }
 
+/// PHP's [`is_numeric()`](https://www.php.net/manual/en/function.is-numeric.php).
 pub fn is_numeric(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Bool(match &args[0] {
         Value::Int(_) | Value::Float(_) => true,

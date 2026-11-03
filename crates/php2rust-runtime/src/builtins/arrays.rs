@@ -16,6 +16,7 @@ fn count_recursive(a: &PhpArray) -> usize {
         .sum()
 }
 
+/// PHP's [`count()`](https://www.php.net/manual/en/function.count.php).
 pub fn count(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let a = match &args[0] {
         Value::Array(a) => a,
@@ -38,6 +39,7 @@ pub fn count(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     }))
 }
 
+/// PHP's [`sizeof()`](https://www.php.net/manual/en/function.sizeof.php).
 pub fn sizeof(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     count(args, ctx)
 }
@@ -50,6 +52,7 @@ fn matches(needle: &Value, v: &Value, strict: bool) -> bool {
     }
 }
 
+/// PHP's [`array_keys()`](https://www.php.net/manual/en/function.array-keys.php).
 pub fn array_keys(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_keys", args, 0, "array")?;
     let strict = bool_arg("array_keys", args, 2, "strict")?;
@@ -60,11 +63,13 @@ pub fn array_keys(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(PhpArray::from_list(keys)))
 }
 
+/// PHP's [`array_values()`](https://www.php.net/manual/en/function.array-values.php).
 pub fn array_values(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_values", args, 0, "array")?;
     Ok(Value::Array(PhpArray::from_list(a.values().cloned())))
 }
 
+/// PHP's [`in_array()`](https://www.php.net/manual/en/function.in-array.php).
 pub fn in_array(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("in_array", args, 1, "haystack")?;
     let strict = bool_arg("in_array", args, 2, "strict")?;
@@ -73,6 +78,7 @@ pub fn in_array(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     ))
 }
 
+/// PHP's [`array_search()`](https://www.php.net/manual/en/function.array-search.php).
 pub fn array_search(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_search", args, 1, "haystack")?;
     let strict = bool_arg("array_search", args, 2, "strict")?;
@@ -81,16 +87,19 @@ pub fn array_search(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
         .map_or(Value::Bool(false), |(k, _)| k.to_value()))
 }
 
+/// PHP's [`array_key_exists()`](https://www.php.net/manual/en/function.array-key-exists.php).
 pub fn array_key_exists(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_key_exists", args, 1, "array")?;
     let key = rt::key(&args[0], ctx)?;
     Ok(Value::Bool(a.contains_key(&key)))
 }
 
+/// PHP's [`key_exists()`](https://www.php.net/manual/en/function.key-exists.php).
 pub fn key_exists(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     array_key_exists(args, ctx)
 }
 
+/// PHP's [`array_merge()`](https://www.php.net/manual/en/function.array-merge.php).
 pub fn array_merge(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let mut out = PhpArray::new();
     for i in 0..args.len() {
@@ -106,6 +115,7 @@ pub fn array_merge(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(out))
 }
 
+/// PHP's [`array_reverse()`](https://www.php.net/manual/en/function.array-reverse.php).
 pub fn array_reverse(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_reverse", args, 0, "array")?;
     let preserve = bool_arg("array_reverse", args, 1, "preserve_keys")?;
@@ -122,6 +132,7 @@ pub fn array_reverse(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(out))
 }
 
+/// PHP's [`array_slice()`](https://www.php.net/manual/en/function.array-slice.php).
 pub fn array_slice(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_slice", args, 0, "array")?;
     let n = a.len() as i64;
@@ -156,6 +167,7 @@ pub fn array_slice(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(out))
 }
 
+/// PHP's [`range()`](https://www.php.net/manual/en/function.range.php).
 pub fn range(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let single_char = |v: &Value| match v {
         Value::Str(s) if s.len() == 1 && !s.as_bytes()[0].is_ascii_digit() => Some(s.as_bytes()[0]),
@@ -252,14 +264,17 @@ fn fold_numbers(
     Ok(acc)
 }
 
+/// PHP's [`array_sum()`](https://www.php.net/manual/en/function.array-sum.php).
 pub fn array_sum(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     fold_numbers("array_sum", args, 0, rt::add, ctx)
 }
 
+/// PHP's [`array_product()`](https://www.php.net/manual/en/function.array-product.php).
 pub fn array_product(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     fold_numbers("array_product", args, 1, rt::mul, ctx)
 }
 
+/// PHP's [`array_flip()`](https://www.php.net/manual/en/function.array-flip.php).
 pub fn array_flip(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_flip", args, 0, "array")?;
     let mut out = PhpArray::new();
@@ -272,6 +287,7 @@ pub fn array_flip(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(out))
 }
 
+/// PHP's [`array_unique()`](https://www.php.net/manual/en/function.array-unique.php).
 pub fn array_unique(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_unique", args, 0, "array")?;
     let mut seen = HashSet::new();
@@ -285,6 +301,7 @@ pub fn array_unique(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(out))
 }
 
+/// PHP's [`array_fill()`](https://www.php.net/manual/en/function.array-fill.php).
 pub fn array_fill(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let start = int_arg("array_fill", args, 0, "start_index", ctx)?;
     let count = int_arg("array_fill", args, 1, "count", ctx)?;
@@ -300,6 +317,7 @@ pub fn array_fill(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(out))
 }
 
+/// PHP's [`array_combine()`](https://www.php.net/manual/en/function.array-combine.php).
 pub fn array_combine(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let keys = array_arg("array_combine", args, 0, "keys")?;
     let values = array_arg("array_combine", args, 1, "values")?;
@@ -319,11 +337,13 @@ pub fn array_combine(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Array(out))
 }
 
+/// PHP's [`array_key_first()`](https://www.php.net/manual/en/function.array-key-first.php).
 pub fn array_key_first(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_key_first", args, 0, "array")?;
     Ok(a.keys().next().map_or(Value::Null, Key::to_value))
 }
 
+/// PHP's [`array_key_last()`](https://www.php.net/manual/en/function.array-key-last.php).
 pub fn array_key_last(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_key_last", args, 0, "array")?;
     Ok(a.keys().last().map_or(Value::Null, Key::to_value))
@@ -413,6 +433,8 @@ fn sort_entries(
     Ok(Value::Bool(true))
 }
 
+/// PHP's [`sort()`](https://www.php.net/manual/en/function.sort.php).
+/// `target` is the array PHP passes by reference.
 pub fn sort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     sort_entries(
         target,
@@ -425,6 +447,8 @@ pub fn sort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<
     )
 }
 
+/// PHP's [`rsort()`](https://www.php.net/manual/en/function.rsort.php).
+/// `target` is the array PHP passes by reference.
 pub fn rsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     sort_entries(
         target,
@@ -437,6 +461,8 @@ pub fn rsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult
     )
 }
 
+/// PHP's [`asort()`](https://www.php.net/manual/en/function.asort.php).
+/// `target` is the array PHP passes by reference.
 pub fn asort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     sort_entries(
         target,
@@ -449,6 +475,8 @@ pub fn asort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult
     )
 }
 
+/// PHP's [`arsort()`](https://www.php.net/manual/en/function.arsort.php).
+/// `target` is the array PHP passes by reference.
 pub fn arsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     sort_entries(
         target,
@@ -461,6 +489,8 @@ pub fn arsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResul
     )
 }
 
+/// PHP's [`ksort()`](https://www.php.net/manual/en/function.ksort.php).
+/// `target` is the array PHP passes by reference.
 pub fn ksort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     sort_entries(
         target,
@@ -473,6 +503,8 @@ pub fn ksort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult
     )
 }
 
+/// PHP's [`krsort()`](https://www.php.net/manual/en/function.krsort.php).
+/// `target` is the array PHP passes by reference.
 pub fn krsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     sort_entries(
         target,
@@ -487,6 +519,8 @@ pub fn krsort(target: &mut Value, args: &[Value], ctx: &mut Context) -> PhpResul
 
 // ------------------------------------------------- stack and queue ops
 
+/// PHP's [`array_push()`](https://www.php.net/manual/en/function.array-push.php).
+/// `target` is the array PHP passes by reference.
 pub fn array_push(target: &mut Value, args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_target("array_push", target, "array")?;
     for v in args {
@@ -499,11 +533,15 @@ pub fn array_push(target: &mut Value, args: &[Value], _ctx: &mut Context) -> Php
     Ok(Value::from(a.len()))
 }
 
+/// PHP's [`array_pop()`](https://www.php.net/manual/en/function.array-pop.php).
+/// `target` is the array PHP passes by reference.
 pub fn array_pop(target: &mut Value, _args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_target("array_pop", target, "array")?;
     Ok(a.pop().unwrap_or_default())
 }
 
+/// PHP's [`array_shift()`](https://www.php.net/manual/en/function.array-shift.php).
+/// `target` is the array PHP passes by reference.
 pub fn array_shift(target: &mut Value, _args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_target("array_shift", target, "array")?;
     let Some((first, _)) = a.get_index(0) else {
@@ -515,6 +553,8 @@ pub fn array_shift(target: &mut Value, _args: &[Value], _ctx: &mut Context) -> P
     Ok(value)
 }
 
+/// PHP's [`array_unshift()`](https://www.php.net/manual/en/function.array-unshift.php).
+/// `target` is the array PHP passes by reference.
 pub fn array_unshift(target: &mut Value, args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_target("array_unshift", target, "array")?;
     let mut out = PhpArray::from_list(args.iter().cloned());

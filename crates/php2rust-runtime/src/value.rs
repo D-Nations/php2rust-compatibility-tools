@@ -10,19 +10,27 @@ use crate::string::PhpString;
 #[derive(Clone, Debug, Default)]
 pub enum Value {
     #[default]
+    /// `null`
     Null,
+    /// `true` or `false`
     Bool(bool),
+    /// A 64-bit integer.
     Int(i64),
+    /// A double-precision float.
     Float(f64),
+    /// A byte string.
     Str(PhpString),
+    /// An ordered map.
     Array(PhpArray),
 }
 
 impl Value {
+    /// A string value holding `bytes`.
     pub fn from_bytes(bytes: &[u8]) -> Value {
         Value::Str(PhpString::from(bytes))
     }
 
+    /// Whether this is `null`.
     pub fn is_null(&self) -> bool {
         matches!(self, Value::Null)
     }

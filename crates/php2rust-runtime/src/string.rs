@@ -15,18 +15,22 @@ use std::rc::Rc;
 pub struct PhpString(Rc<Vec<u8>>);
 
 impl PhpString {
+    /// A string holding `bytes`.
     pub fn new(bytes: Vec<u8>) -> Self {
         PhpString(Rc::new(bytes))
     }
 
+    /// The bytes.
     pub fn as_bytes(&self) -> &[u8] {
         &self.0
     }
 
+    /// The length in bytes, as `strlen()` counts.
     pub fn len(&self) -> usize {
         self.0.len()
     }
 
+    /// Whether the string is empty.
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
@@ -36,6 +40,7 @@ impl PhpString {
         Rc::make_mut(&mut self.0)
     }
 
+    /// The bytes as UTF-8, with invalid sequences replaced, for messages.
     pub fn to_string_lossy(&self) -> String {
         String::from_utf8_lossy(&self.0).into_owned()
     }

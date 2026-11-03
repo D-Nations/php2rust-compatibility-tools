@@ -42,12 +42,14 @@ fn replace_all(subject: &[u8], search: &[u8], replace: &[u8]) -> Vec<u8> {
     split(subject, search).join(replace)
 }
 
+/// PHP's [`strlen()`](https://www.php.net/manual/en/function.strlen.php).
 pub fn strlen(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::from(
         str_arg("strlen", args, 0, "string", ctx)?.len(),
     ))
 }
 
+/// PHP's [`strtoupper()`](https://www.php.net/manual/en/function.strtoupper.php).
 pub fn strtoupper(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(
         str_arg("strtoupper", args, 0, "string", ctx)?
@@ -56,6 +58,7 @@ pub fn strtoupper(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     )
 }
 
+/// PHP's [`strtolower()`](https://www.php.net/manual/en/function.strtolower.php).
 pub fn strtolower(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(
         str_arg("strtolower", args, 0, "string", ctx)?
@@ -64,6 +67,7 @@ pub fn strtolower(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     )
 }
 
+/// PHP's [`ucfirst()`](https://www.php.net/manual/en/function.ucfirst.php).
 pub fn ucfirst(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let mut s = str_arg("ucfirst", args, 0, "string", ctx)?
         .as_bytes()
@@ -74,6 +78,7 @@ pub fn ucfirst(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(s)
 }
 
+/// PHP's [`lcfirst()`](https://www.php.net/manual/en/function.lcfirst.php).
 pub fn lcfirst(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let mut s = str_arg("lcfirst", args, 0, "string", ctx)?
         .as_bytes()
@@ -84,6 +89,7 @@ pub fn lcfirst(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(s)
 }
 
+/// PHP's [`ucwords()`](https://www.php.net/manual/en/function.ucwords.php).
 pub fn ucwords(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let mut s = str_arg("ucwords", args, 0, "string", ctx)?
         .as_bytes()
@@ -104,6 +110,7 @@ pub fn ucwords(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(s)
 }
 
+/// PHP's [`str_repeat()`](https://www.php.net/manual/en/function.str-repeat.php).
 pub fn str_repeat(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let s = str_arg("str_repeat", args, 0, "string", ctx)?;
     let times = int_arg("str_repeat", args, 1, "times", ctx)?;
@@ -115,6 +122,7 @@ pub fn str_repeat(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(s.as_bytes().repeat(times as usize))
 }
 
+/// PHP's [`substr()`](https://www.php.net/manual/en/function.substr.php).
 pub fn substr(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let s = str_arg("substr", args, 0, "string", ctx)?;
     let len = s.len() as i64;
@@ -165,6 +173,7 @@ fn position(found: Option<usize>, base: usize) -> PhpResult<Value> {
     Ok(found.map_or(Value::Bool(false), |i| Value::from(base + i)))
 }
 
+/// PHP's [`strpos()`](https://www.php.net/manual/en/function.strpos.php).
 pub fn strpos(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let h = str_arg("strpos", args, 0, "haystack", ctx)?;
     let n = str_arg("strpos", args, 1, "needle", ctx)?;
@@ -172,6 +181,7 @@ pub fn strpos(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     position(find(&h.as_bytes()[start..], n.as_bytes()), start)
 }
 
+/// PHP's [`stripos()`](https://www.php.net/manual/en/function.stripos.php).
 pub fn stripos(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let h = str_arg("stripos", args, 0, "haystack", ctx)?
         .as_bytes()
@@ -183,6 +193,7 @@ pub fn stripos(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     position(find(&h[start..], &n), start)
 }
 
+/// PHP's [`strrpos()`](https://www.php.net/manual/en/function.strrpos.php).
 pub fn strrpos(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let h = str_arg("strrpos", args, 0, "haystack", ctx)?;
     let n = str_arg("strrpos", args, 1, "needle", ctx)?;
@@ -190,24 +201,28 @@ pub fn strrpos(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     position(rfind(&h.as_bytes()[start..], n.as_bytes()), start)
 }
 
+/// PHP's [`str_contains()`](https://www.php.net/manual/en/function.str-contains.php).
 pub fn str_contains(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let h = str_arg("str_contains", args, 0, "haystack", ctx)?;
     let n = str_arg("str_contains", args, 1, "needle", ctx)?;
     Ok(Value::Bool(find(h.as_bytes(), n.as_bytes()).is_some()))
 }
 
+/// PHP's [`str_starts_with()`](https://www.php.net/manual/en/function.str-starts-with.php).
 pub fn str_starts_with(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let h = str_arg("str_starts_with", args, 0, "haystack", ctx)?;
     let n = str_arg("str_starts_with", args, 1, "needle", ctx)?;
     Ok(Value::Bool(h.as_bytes().starts_with(n.as_bytes())))
 }
 
+/// PHP's [`str_ends_with()`](https://www.php.net/manual/en/function.str-ends-with.php).
 pub fn str_ends_with(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let h = str_arg("str_ends_with", args, 0, "haystack", ctx)?;
     let n = str_arg("str_ends_with", args, 1, "needle", ctx)?;
     Ok(Value::Bool(h.as_bytes().ends_with(n.as_bytes())))
 }
 
+/// PHP's [`str_replace()`](https://www.php.net/manual/en/function.str-replace.php).
 pub fn str_replace(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let pairs: Vec<(Vec<u8>, Vec<u8>)> = match (&args[0], &args[1]) {
         (Value::Array(search), Value::Array(replace)) => {
@@ -320,18 +335,22 @@ fn trim_impl(func: &str, args: &[Value], ends: Ends, ctx: &mut Context) -> PhpRe
     bytes(b[start..end].to_vec())
 }
 
+/// PHP's [`trim()`](https://www.php.net/manual/en/function.trim.php).
 pub fn trim(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     trim_impl("trim", args, Ends::Both, ctx)
 }
 
+/// PHP's [`ltrim()`](https://www.php.net/manual/en/function.ltrim.php).
 pub fn ltrim(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     trim_impl("ltrim", args, Ends::Start, ctx)
 }
 
+/// PHP's [`rtrim()`](https://www.php.net/manual/en/function.rtrim.php).
 pub fn rtrim(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     trim_impl("rtrim", args, Ends::End, ctx)
 }
 
+/// PHP's [`implode()`](https://www.php.net/manual/en/function.implode.php).
 pub fn implode(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let (separator, pieces) = match args {
         [Value::Array(a)] => (Vec::new(), a),
@@ -360,10 +379,12 @@ pub fn implode(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(out)
 }
 
+/// PHP's [`join()`](https://www.php.net/manual/en/function.join.php).
 pub fn join(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     implode(args, ctx)
 }
 
+/// PHP's [`explode()`](https://www.php.net/manual/en/function.explode.php).
 pub fn explode(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let sep = str_arg("explode", args, 0, "separator", ctx)?;
     let s = str_arg("explode", args, 1, "string", ctx)?;
@@ -394,6 +415,7 @@ pub fn explode(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     )))
 }
 
+/// PHP's [`strrev()`](https://www.php.net/manual/en/function.strrev.php).
 pub fn strrev(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let mut s = str_arg("strrev", args, 0, "string", ctx)?
         .as_bytes()
@@ -402,6 +424,7 @@ pub fn strrev(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(s)
 }
 
+/// PHP's [`str_pad()`](https://www.php.net/manual/en/function.str-pad.php).
 pub fn str_pad(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let s = str_arg("str_pad", args, 0, "string", ctx)?;
     let length = int_arg("str_pad", args, 1, "length", ctx)?;
@@ -442,6 +465,7 @@ pub fn str_pad(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(out)
 }
 
+/// PHP's [`str_split()`](https://www.php.net/manual/en/function.str-split.php).
 pub fn str_split(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let s = str_arg("str_split", args, 0, "string", ctx)?;
     let length = if args.len() > 1 {
@@ -479,6 +503,7 @@ fn starts_with_entity(s: &[u8]) -> bool {
     }
 }
 
+/// PHP's [`htmlspecialchars()`](https://www.php.net/manual/en/function.htmlspecialchars.php).
 pub fn htmlspecialchars(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     const ENT_HTML_QUOTE_SINGLE: i64 = 1;
     const ENT_HTML_QUOTE_DOUBLE: i64 = 2;
@@ -524,6 +549,7 @@ pub fn htmlspecialchars(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(out)
 }
 
+/// PHP's [`nl2br()`](https://www.php.net/manual/en/function.nl2br.php).
 pub fn nl2br(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let s = str_arg("nl2br", args, 0, "string", ctx)?;
     let xhtml = args.len() < 2 || bool_arg("nl2br", args, 1, "use_xhtml")?;
@@ -548,22 +574,26 @@ pub fn nl2br(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(out)
 }
 
+/// PHP's [`ord()`](https://www.php.net/manual/en/function.ord.php).
 pub fn ord(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let s = str_arg("ord", args, 0, "character", ctx)?;
     Ok(Value::Int(s.as_bytes().first().copied().unwrap_or(0) as i64))
 }
 
+/// PHP's [`chr()`](https://www.php.net/manual/en/function.chr.php).
 pub fn chr(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let code = int_arg("chr", args, 0, "codepoint", ctx)?;
     bytes(vec![code.rem_euclid(256) as u8])
 }
 
+/// PHP's [`strcmp()`](https://www.php.net/manual/en/function.strcmp.php).
 pub fn strcmp(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let a = str_arg("strcmp", args, 0, "string1", ctx)?;
     let b = str_arg("strcmp", args, 1, "string2", ctx)?;
     Ok(Value::Int(a.as_bytes().cmp(b.as_bytes()) as i64))
 }
 
+/// PHP's [`number_format()`](https://www.php.net/manual/en/function.number-format.php).
 pub fn number_format(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let num = float_arg("number_format", args, 0, "num", ctx)?;
     let decimals = if args.len() > 1 {
@@ -606,11 +636,13 @@ pub fn number_format(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     bytes(out)
 }
 
+/// PHP's [`sprintf()`](https://www.php.net/manual/en/function.sprintf.php).
 pub fn sprintf(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let format = str_arg("sprintf", args, 0, "format", ctx)?;
     bytes(format_printf(format.as_bytes(), &args[1..], ctx)?)
 }
 
+/// PHP's [`printf()`](https://www.php.net/manual/en/function.printf.php).
 pub fn printf(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let format = str_arg("printf", args, 0, "format", ctx)?;
     let out = format_printf(format.as_bytes(), &args[1..], ctx)?;

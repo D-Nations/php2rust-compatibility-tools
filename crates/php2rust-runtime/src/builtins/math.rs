@@ -42,6 +42,7 @@ fn number_value(n: Number) -> Value {
     Value::from(n)
 }
 
+/// PHP's [`abs()`](https://www.php.net/manual/en/function.abs.php).
 pub fn abs(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(match number_arg("abs", args, 0, "num", ctx)? {
         Number::Int(i) => i
@@ -72,26 +73,31 @@ fn extremum(func: &str, args: &[Value], want: Ordering) -> PhpResult<Value> {
     Ok(best.clone())
 }
 
+/// PHP's [`max()`](https://www.php.net/manual/en/function.max.php).
 pub fn max(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     extremum("max", args, Ordering::Greater)
 }
 
+/// PHP's [`min()`](https://www.php.net/manual/en/function.min.php).
 pub fn min(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     extremum("min", args, Ordering::Less)
 }
 
+/// PHP's [`floor()`](https://www.php.net/manual/en/function.floor.php).
 pub fn floor(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Float(
         number_arg("floor", args, 0, "num", ctx)?.as_f64().floor(),
     ))
 }
 
+/// PHP's [`ceil()`](https://www.php.net/manual/en/function.ceil.php).
 pub fn ceil(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Float(
         number_arg("ceil", args, 0, "num", ctx)?.as_f64().ceil(),
     ))
 }
 
+/// PHP's [`round()`](https://www.php.net/manual/en/function.round.php).
 pub fn round(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let num = number_arg("round", args, 0, "num", ctx)?;
     let places = if args.len() > 1 {
@@ -102,6 +108,7 @@ pub fn round(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Float(php_round(num.as_f64(), places)))
 }
 
+/// PHP's [`intdiv()`](https://www.php.net/manual/en/function.intdiv.php).
 pub fn intdiv(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let a = int_arg("intdiv", args, 0, "num1", ctx)?;
     let b = int_arg("intdiv", args, 1, "num2", ctx)?;
@@ -113,22 +120,26 @@ pub fn intdiv(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     })
 }
 
+/// PHP's [`fmod()`](https://www.php.net/manual/en/function.fmod.php).
 pub fn fmod(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let x = float_arg("fmod", args, 0, "num1", ctx)?;
     let y = float_arg("fmod", args, 1, "num2", ctx)?;
     Ok(Value::Float(x % y))
 }
 
+/// PHP's [`sqrt()`](https://www.php.net/manual/en/function.sqrt.php).
 pub fn sqrt(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Float(float_arg("sqrt", args, 0, "num", ctx)?.sqrt()))
 }
 
+/// PHP's [`pow()`](https://www.php.net/manual/en/function.pow.php).
 pub fn pow(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
     let base = number_value(number_arg("pow", args, 0, "num", ctx)?);
     let exp = number_value(number_arg("pow", args, 1, "exponent", ctx)?);
     rt::pow(&base, &exp, ctx)
 }
 
+/// PHP's [`pi()`](https://www.php.net/manual/en/function.pi.php).
 pub fn pi(_args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Float(PI))
 }

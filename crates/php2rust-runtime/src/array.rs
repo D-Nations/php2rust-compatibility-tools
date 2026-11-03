@@ -14,7 +14,9 @@ use crate::value::Value;
 /// A PHP array key. PHP only has integer and string keys.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum Key {
+    /// An integer key. Strings such as `"5"` become integer keys too.
     Int(i64),
+    /// Any other string key.
     Str(PhpString),
 }
 
@@ -33,6 +35,7 @@ impl Key {
         Key::Str(PhpString::from(bytes))
     }
 
+    /// The key as a PHP value, as `foreach` and `array_keys()` see it.
     pub fn to_value(&self) -> Value {
         match self {
             Key::Int(i) => Value::Int(*i),
@@ -70,6 +73,7 @@ struct ArrayData {
 pub struct PhpArray(Rc<ArrayData>);
 
 impl PhpArray {
+    /// An empty array.
     pub fn new() -> Self {
         PhpArray::default()
     }
@@ -87,38 +91,48 @@ impl PhpArray {
         Rc::make_mut(&mut self.0)
     }
 
+    /// The number of elements.
     pub fn len(&self) -> usize {
         self.0.map.len()
     }
 
+    /// Whether the array has no elements.
     pub fn is_empty(&self) -> bool {
         self.0.map.is_empty()
     }
 
+    /// The value at `key`, if present.
     pub fn get(&self, key: &Key) -> Option<&Value> {
         self.0.map.get(key)
     }
 
+    /// Whether `key` is present, even if its value is `null`.
     pub fn contains_key(&self, key: &Key) -> bool {
         self.0.map.contains_key(key)
     }
 
+    /// The element at `index` in insertion order.
     pub fn get_index(&self, index: usize) -> Option<(&Key, &Value)> {
         self.0.map.get_index(index)
     }
 
+    /// Elements in insertion order, as `foreach` visits them.
     pub fn iter(&self) -> impl Iterator<Item = (&Key, &Value)> {
         self.0.map.iter()
     }
 
+    /// Keys in insertion order.
     pub fn keys(&self) -> impl Iterator<Item = &Key> {
         self.0.map.keys()
     }
 
+    /// Values in insertion order.
     pub fn values(&self) -> impl Iterator<Item = &Value> {
         self.0.map.values()
     }
 
+    /// `$a[key] = value`: replaces an existing element in place or appends a new
+    /// one, and advances the next free integer key past an integer `key`.
     pub fn insert(&mut self, key: Key, value: Value) {
         let data = self.data();
         if let Key::Int(k) = key {
@@ -160,6 +174,7 @@ impl PhpArray {
         data.map.entry(key).or_insert(Value::Null)
     }
 
+    /// Mutable access to the element at `key`, if present.
     pub fn get_mut(&mut self, key: &Key) -> Option<&mut Value> {
         if !self.contains_key(key) {
             return None;

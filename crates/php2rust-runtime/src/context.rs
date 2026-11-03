@@ -20,18 +20,22 @@ pub struct Context {
 }
 
 impl Context {
+    /// The state of a new request: no output, constants or included files.
     pub fn new() -> Self {
         Context::default()
     }
 
+    /// Appends bytes to the response body.
     pub fn write(&mut self, bytes: &[u8]) {
         self.output.extend_from_slice(bytes);
     }
 
+    /// The response body so far.
     pub fn output(&self) -> &[u8] {
         &self.output
     }
 
+    /// Takes the response body, leaving it empty.
     pub fn take_output(&mut self) -> Vec<u8> {
         mem::take(&mut self.output)
     }
@@ -41,6 +45,7 @@ impl Context {
         self.report("Warning", &message.into());
     }
 
+    /// Records an `E_DEPRECATED` notice. Notices go to stderr rather than into the page.
     pub fn deprecated(&mut self, message: impl Into<String>) {
         self.report("Deprecated", &message.into());
     }
@@ -78,6 +83,7 @@ impl Context {
         true
     }
 
+    /// The value of a constant defined with `define()` or `const`; an `Error` if undefined.
     pub fn constant(&self, name: &[u8]) -> PhpResult<Value> {
         self.constants.get(name).cloned().ok_or_else(|| {
             PhpError::error(format!(

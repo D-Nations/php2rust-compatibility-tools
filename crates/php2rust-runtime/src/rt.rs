@@ -15,12 +15,14 @@ use crate::value::Value;
 
 // ---------------------------------------------------------------- output
 
+/// `echo`: converts the value to a string, as PHP does, and writes it.
 pub fn echo(value: &Value, ctx: &mut Context) -> PhpResult<()> {
     let s = to_str(value, ctx);
     ctx.write(s.as_bytes());
     Ok(())
 }
 
+/// Writes literal bytes: inline HTML outside `<?php ?>` tags.
 pub fn echo_bytes(bytes: &[u8], ctx: &mut Context) {
     ctx.write(bytes);
 }
@@ -55,10 +57,12 @@ pub fn to_str(value: &Value, ctx: &mut Context) -> PhpString {
     value.to_php_string()
 }
 
+/// `(string)`: string conversion, warning on arrays.
 pub fn cast_string(value: &Value, ctx: &mut Context) -> Value {
     Value::Str(to_str(value, ctx))
 }
 
+/// `(array)`: an array stays as it is, `null` becomes `[]`, a scalar becomes `[scalar]`.
 pub fn cast_array(value: Value) -> Value {
     match value {
         Value::Array(_) => value,
@@ -72,19 +76,23 @@ pub fn cast_array(value: Value) -> Value {
 pub struct StrBuilder(Vec<u8>);
 
 impl StrBuilder {
+    /// An empty string.
     pub fn new() -> Self {
         StrBuilder::default()
     }
 
+    /// Appends literal text.
     pub fn lit(&mut self, bytes: &[u8]) {
         self.0.extend_from_slice(bytes);
     }
 
+    /// Appends a value converted to a string, as interpolation does.
     pub fn val(&mut self, value: &Value, ctx: &mut Context) {
         let s = to_str(value, ctx);
         self.0.extend_from_slice(s.as_bytes());
     }
 
+    /// The finished string.
     pub fn finish(self) -> Value {
         Value::from(self.0)
     }
@@ -139,6 +147,7 @@ fn int_or_float(
     }
 }
 
+/// `a + b` with PHP 8 numeric rules: numeric strings convert, integers overflow to float.
 pub fn add(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     if let (Value::Array(x), Value::Array(y)) = (a, b) {
         let mut union = x.clone();
@@ -153,16 +162,19 @@ pub fn add(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     Ok(int_or_float(x, y, i64::checked_add, |p, q| p + q))
 }
 
+/// `a - b`.
 pub fn sub(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let (x, y) = operands("-", a, b, ctx)?;
     Ok(int_or_float(x, y, i64::checked_sub, |p, q| p - q))
 }
 
+/// `a * b`.
 pub fn mul(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let (x, y) = operands("*", a, b, ctx)?;
     Ok(int_or_float(x, y, i64::checked_mul, |p, q| p * q))
 }
 
+/// `a / b`: an integer when the division is exact, otherwise a float; dividing by zero throws.
 pub fn div(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let (x, y) = operands("/", a, b, ctx)?;
     if y.as_f64() == 0.0 {
@@ -189,6 +201,7 @@ fn int_operand(n: Number, ctx: &mut Context) -> i64 {
     }
 }
 
+/// `a % b`, on integers.
 pub fn rem(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let (x, y) = operands("%", a, b, ctx)?;
     let (i, j) = (int_operand(x, ctx), int_operand(y, ctx));
@@ -198,6 +211,7 @@ pub fn rem(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Int(i.wrapping_rem(j)))
 }
 
+/// `a ** b`.
 pub fn pow(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let (x, y) = operands("**", a, b, ctx)?;
     Ok(match (x, y) {
@@ -241,6 +255,7 @@ fn bytewise(a: &PhpString, b: &PhpString, op: fn(u8, u8) -> u8, longest: bool) -
     )
 }
 
+/// `a & b`.
 pub fn bit_and(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     if let (Value::Str(x), Value::Str(y)) = (a, b) {
         return Ok(bytewise(x, y, |p, q| p & q, false));
@@ -249,6 +264,7 @@ pub fn bit_and(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Int(i & j))
 }
 
+/// `a | b`.
 pub fn bit_or(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     if let (Value::Str(x), Value::Str(y)) = (a, b) {
         return Ok(bytewise(x, y, |p, q| p | q, true));
@@ -257,6 +273,7 @@ pub fn bit_or(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Int(i | j))
 }
 
+/// `a ^ b`.
 pub fn bit_xor(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     if let (Value::Str(x), Value::Str(y)) = (a, b) {
         return Ok(bytewise(x, y, |p, q| p ^ q, false));
@@ -265,6 +282,7 @@ pub fn bit_xor(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Int(i ^ j))
 }
 
+/// `a << b`.
 pub fn shl(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let (i, j) = int_operands("<<", a, b, ctx)?;
     if j < 0 {
@@ -273,6 +291,7 @@ pub fn shl(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     Ok(Value::Int(if j >= 64 { 0 } else { i << j }))
 }
 
+/// `a >> b`.
 pub fn shr(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let (i, j) = int_operands(">>", a, b, ctx)?;
     if j < 0 {
@@ -285,6 +304,7 @@ pub fn shr(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     }))
 }
 
+/// `~a`.
 pub fn bit_not(a: &Value) -> PhpResult<Value> {
     match a {
         Value::Int(i) => Ok(Value::Int(!i)),
@@ -299,6 +319,7 @@ pub fn bit_not(a: &Value) -> PhpResult<Value> {
     }
 }
 
+/// `a . b`.
 pub fn concat(a: &Value, b: &Value, ctx: &mut Context) -> PhpResult<Value> {
     let mut bytes = to_str(a, ctx).as_bytes().to_vec();
     bytes.extend_from_slice(to_str(b, ctx).as_bytes());
@@ -427,10 +448,12 @@ pub fn strict_eq(a: &Value, b: &Value) -> bool {
     }
 }
 
+/// `a < b` with PHP 8 comparison rules.
 pub fn lt(a: &Value, b: &Value) -> bool {
     compare(a, b) == Ordering::Less
 }
 
+/// `a <= b`.
 pub fn le(a: &Value, b: &Value) -> bool {
     compare(a, b) != Ordering::Greater
 }
@@ -440,10 +463,12 @@ pub fn gt(a: &Value, b: &Value) -> bool {
     compare(b, a) == Ordering::Less
 }
 
+/// `a >= b`, compiled as `b <= a` like `>`.
 pub fn ge(a: &Value, b: &Value) -> bool {
     compare(b, a) != Ordering::Greater
 }
 
+/// `a <=> b`: -1, 0 or 1.
 pub fn spaceship(a: &Value, b: &Value) -> Value {
     Value::Int(compare(a, b) as i64)
 }
@@ -494,6 +519,7 @@ fn increment_string(s: &[u8]) -> Vec<u8> {
     out
 }
 
+/// Increments in place, as `++` does: numbers, numeric strings and PHP's string increment.
 pub fn inc(v: &mut Value) -> PhpResult<()> {
     *v = match &*v {
         Value::Null => Value::Int(1),
@@ -514,6 +540,7 @@ pub fn inc(v: &mut Value) -> PhpResult<()> {
     Ok(())
 }
 
+/// Decrements in place, as `--` does.
 pub fn dec(v: &mut Value) -> PhpResult<()> {
     *v = match &*v {
         Value::Null | Value::Bool(_) => return Ok(()),
@@ -534,22 +561,26 @@ pub fn dec(v: &mut Value) -> PhpResult<()> {
     Ok(())
 }
 
+/// `++$v`: increments, then returns the new value.
 pub fn pre_inc(v: &mut Value) -> PhpResult<Value> {
     inc(v)?;
     Ok(v.clone())
 }
 
+/// `--$v`: decrements, then returns the new value.
 pub fn pre_dec(v: &mut Value) -> PhpResult<Value> {
     dec(v)?;
     Ok(v.clone())
 }
 
+/// `$v++`: returns the old value, then increments.
 pub fn post_inc(v: &mut Value) -> PhpResult<Value> {
     let old = v.clone();
     inc(v)?;
     Ok(old)
 }
 
+/// `$v--`: returns the old value, then decrements.
 pub fn post_dec(v: &mut Value) -> PhpResult<Value> {
     let old = v.clone();
     dec(v)?;
@@ -756,6 +787,7 @@ pub fn spread(target: &mut PhpArray, v: &Value) -> PhpResult<()> {
     Ok(())
 }
 
+/// The `UnhandledMatchError` for a `match` with no arm for `v`.
 pub fn unhandled_match(v: &Value) -> PhpError {
     let repr = match v {
         Value::Str(s) => format!("{:?}", s.to_string_lossy()),
@@ -808,10 +840,15 @@ pub enum TypeMode {
 /// The declared type of a parameter, for coercion at call time.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ParamType {
+    /// `int`
     Int,
+    /// `float`
     Float,
+    /// `string`
     String,
+    /// `bool`
     Bool,
+    /// `array`
     Array,
 }
 
@@ -827,6 +864,8 @@ impl ParamType {
     }
 }
 
+/// The `ArgumentCountError` for calling a user function with too few arguments.
+/// `exact` is true when the function has no optional parameters.
 pub fn too_few_arguments(function: &str, passed: usize, required: usize, exact: bool) -> PhpError {
     let quantifier = if exact { "exactly" } else { "at least" };
     PhpError::argument_count_error(format!(

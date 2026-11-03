@@ -14,8 +14,9 @@ pub fn float_repr(f: f64) -> String {
     php_gcvt(f, 0)
 }
 
-/// Port of `php_gcvt` from `main/snprintf.c`. `precision == 0` selects the
-/// shortest round-trip digits (zend_dtoa mode 0) with a 17-digit threshold.
+/// Reproduces the output of PHP's `php_gcvt`, built on Rust's own float
+/// formatting rather than translated from PHP's source. `precision == 0`
+/// selects the shortest round-trip digits with a 17-digit threshold.
 pub fn php_gcvt(value: f64, precision: usize) -> String {
     if value.is_nan() {
         return "NAN".into();

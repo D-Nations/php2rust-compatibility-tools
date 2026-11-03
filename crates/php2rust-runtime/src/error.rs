@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::fmt;
 
 /// Why a PHP script stopped early.
@@ -60,4 +61,4 @@ impl fmt::Display for PhpError {
     }
 }
 
-impl std::error::Error for PhpError {}
+impl Error for PhpError {}

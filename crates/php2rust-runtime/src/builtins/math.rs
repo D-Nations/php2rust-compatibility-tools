@@ -1,4 +1,5 @@
 use std::cmp::Ordering;
+use std::f64::consts::PI;
 
 use super::{array_arg, float_arg, int_arg, number_arg};
 use crate::context::Context;
@@ -129,7 +130,7 @@ pub fn pow(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
 }
 
 pub fn pi(_args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
-    Ok(Value::Float(std::f64::consts::PI))
+    Ok(Value::Float(PI))
 }
 
 #[cfg(test)]

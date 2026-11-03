@@ -1,4 +1,5 @@
 use std::cmp::Ordering;
+use std::collections::HashSet;
 
 use super::{array_arg, array_target, bool_arg, int_arg, number_arg};
 use crate::context::Context;
@@ -273,7 +274,7 @@ pub fn array_flip(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
 
 pub fn array_unique(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
     let a = array_arg("array_unique", args, 0, "array")?;
-    let mut seen = std::collections::HashSet::new();
+    let mut seen = HashSet::new();
     let mut out = PhpArray::new();
     for (k, v) in a.iter() {
         // Default flag SORT_STRING: values are equal if their string forms are.

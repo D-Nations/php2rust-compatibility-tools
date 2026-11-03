@@ -4,6 +4,7 @@
 )]
 
 use std::rc::Rc;
+use std::str;
 
 use indexmap::IndexMap;
 
@@ -23,7 +24,7 @@ impl Key {
     /// else (`"05"`, `"-0"`, `"1.5"`) stays a string key.
     pub fn from_bytes(bytes: &[u8]) -> Key {
         if is_canonical_int(bytes)
-            && let Some(i) = std::str::from_utf8(bytes)
+            && let Some(i) = str::from_utf8(bytes)
                 .ok()
                 .and_then(|s| s.parse::<i64>().ok())
         {

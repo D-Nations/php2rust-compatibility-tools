@@ -1,5 +1,7 @@
 //! PHP 8 numeric-string rules (the "Saner numeric strings" RFC).
 
+use std::str;
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Number {
     Int(i64),
@@ -93,7 +95,7 @@ fn parse_prefix(s: &[u8]) -> Option<(Number, usize)> {
         }
     }
     // The prefix is pure ASCII by construction.
-    let text = std::str::from_utf8(&s[start..i]).ok()?;
+    let text = str::from_utf8(&s[start..i]).ok()?;
     if !is_float {
         if let Ok(n) = text.parse::<i64>() {
             return Some((Number::Int(n), i));

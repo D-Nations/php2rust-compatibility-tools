@@ -1,5 +1,7 @@
 //! Byte-exact reproductions of PHP's float formatting, `var_dump` and `print_r`.
 
+use std::iter;
+
 use crate::array::Key;
 use crate::value::Value;
 
@@ -57,13 +59,13 @@ pub fn php_gcvt(value: f64, precision: usize) -> String {
         out.push_str(&e.abs().to_string());
     } else if decpt <= 0 {
         out.push_str("0.");
-        out.extend(std::iter::repeat_n('0', (-decpt) as usize));
+        out.extend(iter::repeat_n('0', (-decpt) as usize));
         out.push_str(&digits);
     } else {
         let int_len = decpt as usize;
         if digits.len() <= int_len {
             out.push_str(&digits);
-            out.extend(std::iter::repeat_n('0', int_len - digits.len()));
+            out.extend(iter::repeat_n('0', int_len - digits.len()));
         } else {
             out.push_str(&digits[..int_len]);
             out.push('.');
@@ -74,7 +76,7 @@ pub fn php_gcvt(value: f64, precision: usize) -> String {
 }
 
 pub fn var_dump(value: &Value, indent: usize, out: &mut Vec<u8>) {
-    out.extend(std::iter::repeat_n(b' ', indent));
+    out.extend(iter::repeat_n(b' ', indent));
     match value {
         Value::Null => out.extend_from_slice(b"NULL\n"),
         Value::Bool(b) => out.extend_from_slice(if *b {
@@ -92,7 +94,7 @@ pub fn var_dump(value: &Value, indent: usize, out: &mut Vec<u8>) {
         Value::Array(a) => {
             out.extend_from_slice(format!("array({}) {{\n", a.len()).as_bytes());
             for (k, v) in a.iter() {
-                out.extend(std::iter::repeat_n(b' ', indent + 2));
+                out.extend(iter::repeat_n(b' ', indent + 2));
                 match k {
                     Key::Int(i) => out.extend_from_slice(format!("[{i}]=>\n").as_bytes()),
                     Key::Str(s) => {
@@ -103,7 +105,7 @@ pub fn var_dump(value: &Value, indent: usize, out: &mut Vec<u8>) {
                 }
                 var_dump(v, indent + 2, out);
             }
-            out.extend(std::iter::repeat_n(b' ', indent));
+            out.extend(iter::repeat_n(b' ', indent));
             out.extend_from_slice(b"}\n");
         }
     }
@@ -113,10 +115,10 @@ pub fn print_r(value: &Value, indent: usize, out: &mut Vec<u8>) {
     match value {
         Value::Array(a) => {
             out.extend_from_slice(b"Array\n");
-            out.extend(std::iter::repeat_n(b' ', indent));
+            out.extend(iter::repeat_n(b' ', indent));
             out.extend_from_slice(b"(\n");
             for (k, v) in a.iter() {
-                out.extend(std::iter::repeat_n(b' ', indent + 4));
+                out.extend(iter::repeat_n(b' ', indent + 4));
                 out.push(b'[');
                 match k {
                     Key::Int(i) => out.extend_from_slice(i.to_string().as_bytes()),
@@ -126,7 +128,7 @@ pub fn print_r(value: &Value, indent: usize, out: &mut Vec<u8>) {
                 print_r(v, indent + 8, out);
                 out.push(b'\n');
             }
-            out.extend(std::iter::repeat_n(b' ', indent));
+            out.extend(iter::repeat_n(b' ', indent));
             out.extend_from_slice(b")\n");
         }
         scalar => out.extend_from_slice(&scalar.to_string_bytes()),

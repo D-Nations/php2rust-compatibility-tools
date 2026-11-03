@@ -1,3 +1,5 @@
+use std::{iter, str};
+
 use super::math::php_round;
 use super::{bool_arg, float_arg, int_arg, str_arg};
 use crate::context::Context;
@@ -490,7 +492,7 @@ pub fn htmlspecialchars(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
         3 | 8
     };
     let double_encode = args.len() <= 3 || bool_arg("htmlspecialchars", args, 3, "double_encode")?;
-    let input: Vec<u8> = match std::str::from_utf8(s.as_bytes()) {
+    let input: Vec<u8> = match str::from_utf8(s.as_bytes()) {
         Ok(_) => s.as_bytes().to_vec(),
         Err(_) if flags & ENT_SUBSTITUTE != 0 => String::from_utf8_lossy(s.as_bytes())
             .into_owned()
@@ -638,7 +640,7 @@ fn pad_to(body: Vec<u8>, width: usize, pad: u8, align: Align, content: Content) 
     let fill = width - body.len();
     if align == Align::Left {
         let mut out = body;
-        out.extend(std::iter::repeat_n(pad, fill));
+        out.extend(iter::repeat_n(pad, fill));
         return out;
     }
     let mut out = Vec::with_capacity(width);
@@ -648,7 +650,7 @@ fn pad_to(body: Vec<u8>, width: usize, pad: u8, align: Align, content: Content) 
         out.push(body[0]);
         body = &body[1..];
     }
-    out.extend(std::iter::repeat_n(pad, fill));
+    out.extend(iter::repeat_n(pad, fill));
     out.extend_from_slice(body);
     out
 }
@@ -689,7 +691,7 @@ fn format_printf(format: &[u8], args: &[Value], ctx: &mut Context) -> PhpResult<
             .find(|&j| !format[j].is_ascii_digit())
             .unwrap_or(format.len());
         if digits_end > i && at(digits_end) == Some(b'$') {
-            let n: usize = std::str::from_utf8(&format[i..digits_end])
+            let n: usize = str::from_utf8(&format[i..digits_end])
                 .expect("ASCII digits are UTF-8")
                 .parse()
                 .unwrap_or(0);

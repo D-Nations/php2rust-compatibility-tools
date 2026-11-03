@@ -7,6 +7,8 @@
 
 #![forbid(unsafe_code)]
 
+use std::io;
+
 mod array;
 pub mod builtins;
 mod context;
@@ -36,7 +38,7 @@ pub fn run_main(script: fn(&mut Context) -> PhpResult<Value>) -> i32 {
 
     let mut ctx = Context::new();
     let result = script(&mut ctx);
-    let mut stdout = std::io::stdout().lock();
+    let mut stdout = io::stdout().lock();
     let _ = stdout.write_all(&ctx.take_output());
     let _ = stdout.flush();
     match result {

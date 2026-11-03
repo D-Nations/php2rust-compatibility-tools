@@ -1,4 +1,5 @@
 use std::collections::{HashMap, HashSet};
+use std::mem;
 
 use crate::error::{PhpError, PhpResult};
 use crate::value::Value;
@@ -32,7 +33,7 @@ impl Context {
     }
 
     pub fn take_output(&mut self) -> Vec<u8> {
-        std::mem::take(&mut self.output)
+        mem::take(&mut self.output)
     }
 
     /// Records an `E_WARNING`. Warnings go to stderr rather than into the page.

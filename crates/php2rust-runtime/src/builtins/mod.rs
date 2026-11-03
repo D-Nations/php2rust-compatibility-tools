@@ -9,6 +9,8 @@ mod arrays;
 mod math;
 mod strings;
 
+use std::f64::consts::{E, PI, SQRT_2};
+
 pub use arrays::*;
 pub use math::*;
 pub use strings::*;
@@ -17,7 +19,7 @@ use crate::context::Context;
 use crate::error::{PhpError, PhpResult};
 use crate::numeric::{self, Number, Numericity};
 use crate::string::PhpString;
-use crate::{PhpArray, Value, format};
+use crate::{PhpArray, Value, format, rt};
 
 /// How the transpiler should call a builtin.
 pub struct Builtin {
@@ -180,9 +182,9 @@ pub const CONSTANTS: &[(&str, Constant)] = &[
     ("PHP_FLOAT_MIN", Constant::Float(f64::MIN_POSITIVE)),
     ("NAN", Constant::Float(f64::NAN)),
     ("INF", Constant::Float(f64::INFINITY)),
-    ("M_PI", Constant::Float(std::f64::consts::PI)),
-    ("M_E", Constant::Float(std::f64::consts::E)),
-    ("M_SQRT2", Constant::Float(std::f64::consts::SQRT_2)),
+    ("M_PI", Constant::Float(PI)),
+    ("M_E", Constant::Float(E)),
+    ("M_SQRT2", Constant::Float(SQRT_2)),
     ("DIRECTORY_SEPARATOR", Constant::Str("/")),
     ("E_ERROR", Constant::Int(1)),
     ("E_WARNING", Constant::Int(2)),
@@ -434,7 +436,7 @@ pub fn floatval(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
 }
 
 pub fn strval(args: &[Value], ctx: &mut Context) -> PhpResult<Value> {
-    Ok(crate::rt::cast_string(&args[0], ctx))
+    Ok(rt::cast_string(&args[0], ctx))
 }
 
 pub fn boolval(args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {

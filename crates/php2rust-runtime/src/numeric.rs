@@ -121,30 +121,34 @@ pub fn float_to_int(f: f64) -> i64 {
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
+
     use super::*;
 
-    #[test]
-    fn classifies_like_php8() {
-        assert_eq!(classify(b"123"), Numericity::Numeric(Number::Int(123)));
-        assert_eq!(classify(b"  12  "), Numericity::Numeric(Number::Int(12)));
-        assert_eq!(classify(b"1e3"), Numericity::Numeric(Number::Float(1000.0)));
-        assert_eq!(classify(b".5"), Numericity::Numeric(Number::Float(0.5)));
-        assert_eq!(classify(b"12abc"), Numericity::Leading(Number::Int(12)));
-        assert_eq!(classify(b"1e"), Numericity::Leading(Number::Int(1)));
-        assert_eq!(classify(b"abc"), Numericity::NonNumeric);
-        assert_eq!(classify(b""), Numericity::NonNumeric);
-        assert_eq!(classify(b"."), Numericity::NonNumeric);
-        assert_eq!(classify(b"0x1A"), Numericity::Leading(Number::Int(0)));
-        assert_eq!(
-            classify(b"9223372036854775808"),
-            Numericity::Numeric(Number::Float(i64::MAX as f64))
-        );
+    #[rstest]
+    #[case::int(b"123", Numericity::Numeric(Number::Int(123)))]
+    #[case::surrounding_whitespace(b"  12  ", Numericity::Numeric(Number::Int(12)))]
+    #[case::exponent(b"1e3", Numericity::Numeric(Number::Float(1000.0)))]
+    #[case::leading_dot(b".5", Numericity::Numeric(Number::Float(0.5)))]
+    #[case::trailing_text(b"12abc", Numericity::Leading(Number::Int(12)))]
+    #[case::incomplete_exponent(b"1e", Numericity::Leading(Number::Int(1)))]
+    #[case::text(b"abc", Numericity::NonNumeric)]
+    #[case::empty(b"", Numericity::NonNumeric)]
+    #[case::dot(b".", Numericity::NonNumeric)]
+    #[case::hex_is_not_numeric(b"0x1A", Numericity::Leading(Number::Int(0)))]
+    #[case::beyond_i64(
+        b"9223372036854775808",
+        Numericity::Numeric(Number::Float(i64::MAX as f64))
+    )]
+    fn classifies_like_php8(#[case] bytes: &[u8], #[case] expected: Numericity) {
+        assert_eq!(classify(bytes), expected);
     }
 
-    #[test]
-    fn float_to_int_wraps() {
-        assert_eq!(float_to_int(f64::NAN), 0);
-        assert_eq!(float_to_int(-3.9), -3);
-        assert_eq!(float_to_int(1.8446744073709552e19), 0);
+    #[rstest]
+    #[case::nan(f64::NAN, 0)]
+    #[case::truncates(-3.9, -3)]
+    #[case::wraps_at_2_64(1.8446744073709552e19, 0)]
+    fn float_to_int_wraps(#[case] value: f64, #[case] expected: i64) {
+        assert_eq!(float_to_int(value), expected);
     }
 }

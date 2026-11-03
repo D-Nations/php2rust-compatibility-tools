@@ -8,3 +8,6 @@ publish.workspace = true
 
 [dependencies]
 indexmap.workspace = true
+
+[dev-dependencies]
+rstest.workspace = true

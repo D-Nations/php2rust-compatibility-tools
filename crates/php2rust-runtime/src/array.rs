@@ -207,20 +207,24 @@ impl ArrayData {
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
+
     use super::*;
 
-    #[test]
-    fn normalizes_keys() {
-        assert_eq!(Key::from_bytes(b"5"), Key::Int(5));
-        assert_eq!(Key::from_bytes(b"-3"), Key::Int(-3));
-        assert_eq!(Key::from_bytes(b"0"), Key::Int(0));
-        assert!(matches!(Key::from_bytes(b"05"), Key::Str(_)));
-        assert!(matches!(Key::from_bytes(b"-0"), Key::Str(_)));
-        assert!(matches!(Key::from_bytes(b""), Key::Str(_)));
-        assert!(matches!(
-            Key::from_bytes(b"9223372036854775808"),
-            Key::Str(_)
-        ));
+    /// `Some(n)` when PHP turns the string into the integer key `n`.
+    #[rstest]
+    #[case::int(b"5", Some(5))]
+    #[case::negative(b"-3", Some(-3))]
+    #[case::zero(b"0", Some(0))]
+    #[case::leading_zero(b"05", None)]
+    #[case::negative_zero(b"-0", None)]
+    #[case::empty(b"", None)]
+    #[case::beyond_i64(b"9223372036854775808", None)]
+    fn normalizes_keys(#[case] bytes: &[u8], #[case] int: Option<i64>) {
+        match int {
+            Some(n) => assert_eq!(Key::from_bytes(bytes), Key::Int(n)),
+            None => assert!(matches!(Key::from_bytes(bytes), Key::Str(_))),
+        }
     }
 
     #[test]
@@ -232,15 +236,19 @@ mod tests {
     }
 
     #[test]
-    fn next_key_follows_php83() {
+    fn next_key_after_a_negative_key_is_one_more() {
         let mut a = PhpArray::new();
         a.insert(Key::Int(-5), Value::Null);
         a.push(Value::Null);
         assert!(a.contains_key(&Key::Int(-4)));
-        let mut b = PhpArray::new();
-        b.insert(Key::Int(7), Value::Null);
-        b.remove(&Key::Int(7));
-        b.push(Value::Null);
-        assert!(b.contains_key(&Key::Int(8)));
+    }
+
+    #[test]
+    fn next_key_survives_removing_the_largest() {
+        let mut a = PhpArray::new();
+        a.insert(Key::Int(7), Value::Null);
+        a.remove(&Key::Int(7));
+        a.push(Value::Null);
+        assert!(a.contains_key(&Key::Int(8)));
     }
 }

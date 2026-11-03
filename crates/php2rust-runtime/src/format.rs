@@ -135,29 +135,35 @@ pub fn print_r(value: &Value, indent: usize, out: &mut Vec<u8>) {
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
+
     use super::*;
 
-    #[test]
-    fn echo_precision() {
-        assert_eq!(float_to_string(0.1 + 0.2), "0.3");
-        assert_eq!(float_to_string(1.0 / 3.0), "0.33333333333333");
-        assert_eq!(float_to_string(1e20), "1.0E+20");
-        assert_eq!(float_to_string(1e14), "1.0E+14");
-        assert_eq!(float_to_string(1e13), "10000000000000");
-        assert_eq!(float_to_string(1.0), "1");
-        assert_eq!(float_to_string(-0.0001), "-0.0001");
-        assert_eq!(float_to_string(0.00001), "1.0E-5");
-        assert_eq!(float_to_string(-0.0), "-0");
-        assert_eq!(float_to_string(i64::MAX as f64), "9.2233720368548E+18");
-        assert_eq!(float_to_string(f64::INFINITY), "INF");
+    /// `echo $float`: 14 significant digits.
+    #[rstest]
+    #[case::sum(0.1 + 0.2, "0.3")]
+    #[case::third(1.0 / 3.0, "0.33333333333333")]
+    #[case::large_exponent(1e20, "1.0E+20")]
+    #[case::exponent_threshold(1e14, "1.0E+14")]
+    #[case::below_threshold(1e13, "10000000000000")]
+    #[case::whole(1.0, "1")]
+    #[case::small_negative(-0.0001, "-0.0001")]
+    #[case::small_exponent(0.00001, "1.0E-5")]
+    #[case::negative_zero(-0.0, "-0")]
+    #[case::i64_max(i64::MAX as f64, "9.2233720368548E+18")]
+    #[case::infinity(f64::INFINITY, "INF")]
+    fn echo_precision(#[case] value: f64, #[case] expected: &str) {
+        assert_eq!(float_to_string(value), expected);
     }
 
-    #[test]
-    fn serialize_precision() {
-        assert_eq!(float_repr(0.1 + 0.2), "0.30000000000000004");
-        assert_eq!(float_repr(1.0), "1");
-        assert_eq!(float_repr(1.5), "1.5");
-        // Shortest round-trip digits (zend_dtoa mode 0), so 16 digits here, not 17.
-        assert_eq!(float_repr(i64::MAX as f64), "9.223372036854776E+18");
+    /// `var_dump` and friends: the shortest string that round-trips.
+    #[rstest]
+    #[case::sum(0.1 + 0.2, "0.30000000000000004")]
+    #[case::whole(1.0, "1")]
+    #[case::fraction(1.5, "1.5")]
+    // Shortest round-trip digits, so 16 digits here, not 17.
+    #[case::i64_max(i64::MAX as f64, "9.223372036854776E+18")]
+    fn serialize_precision(#[case] value: f64, #[case] expected: &str) {
+        assert_eq!(float_repr(value), expected);
     }
 }

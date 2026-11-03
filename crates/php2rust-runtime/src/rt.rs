@@ -878,48 +878,57 @@ pub fn rest_args(args: &[Value], from: usize) -> Value {
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
+
     use super::*;
 
     fn s(v: &str) -> Value {
         Value::from(v)
     }
 
-    #[test]
-    fn php8_loose_equality() {
-        assert!(!loose_eq(&Value::Int(0), &s("a")));
-        assert!(loose_eq(&s("1"), &s("01")));
-        assert!(loose_eq(&s("10"), &s("1e1")));
-        assert!(loose_eq(&Value::Null, &Value::Bool(false)));
-        assert!(loose_eq(
-            &Value::Array(PhpArray::new()),
-            &Value::Bool(false)
-        ));
-        assert!(!loose_eq(&Value::Float(f64::NAN), &Value::Float(f64::NAN)));
+    #[rstest]
+    #[case::int_vs_text(Value::Int(0), s("a"), false)]
+    #[case::numeric_strings(s("1"), s("01"), true)]
+    #[case::exponent_string(s("10"), s("1e1"), true)]
+    #[case::null_vs_false(Value::Null, Value::Bool(false), true)]
+    #[case::empty_array_vs_false(Value::Array(PhpArray::new()), Value::Bool(false), true)]
+    #[case::nan(Value::Float(f64::NAN), Value::Float(f64::NAN), false)]
+    fn php8_loose_equality(#[case] a: Value, #[case] b: Value, #[case] equal: bool) {
+        assert_eq!(loose_eq(&a, &b), equal);
     }
 
     #[test]
-    fn arithmetic_overflows_to_float() {
-        let mut ctx = Context::new();
-        let r = add(&Value::Int(i64::MAX), &Value::Int(1), &mut ctx).unwrap();
+    fn int_overflow_becomes_float() {
+        let r = add(&Value::Int(i64::MAX), &Value::Int(1), &mut Context::new()).unwrap();
         assert!(matches!(r, Value::Float(f) if f == i64::MAX as f64));
-        assert!(
-            matches!(div(&Value::Int(7), &Value::Int(2), &mut ctx).unwrap(), Value::Float(f) if f == 3.5)
-        );
-        assert!(matches!(
-            div(&Value::Int(8), &Value::Int(2), &mut ctx).unwrap(),
-            Value::Int(4)
-        ));
-        assert!(div(&Value::Int(1), &Value::Int(0), &mut ctx).is_err());
-        assert!(add(&s("abc"), &Value::Int(1), &mut ctx).is_err());
+    }
+
+    #[rstest]
+    #[case::inexact(7, 2, "Float(3.5)")]
+    #[case::exact(8, 2, "Int(4)")]
+    fn division(#[case] a: i64, #[case] b: i64, #[case] expected: &str) {
+        let r = div(&Value::Int(a), &Value::Int(b), &mut Context::new()).unwrap();
+        assert_eq!(format!("{r:?}"), expected);
     }
 
     #[test]
-    fn string_increment() {
-        assert_eq!(increment_string(b"a"), b"b");
-        assert_eq!(increment_string(b"Az"), b"Ba");
-        assert_eq!(increment_string(b"zz"), b"aaa");
-        assert_eq!(increment_string(b"a9"), b"b0");
-        assert_eq!(increment_string(b"Zz"), b"AAa");
+    fn division_by_zero_is_an_error() {
+        assert!(div(&Value::Int(1), &Value::Int(0), &mut Context::new()).is_err());
+    }
+
+    #[test]
+    fn arithmetic_on_text_is_an_error() {
+        assert!(add(&s("abc"), &Value::Int(1), &mut Context::new()).is_err());
+    }
+
+    #[rstest]
+    #[case::letter(b"a", b"b")]
+    #[case::carry_case(b"Az", b"Ba")]
+    #[case::grows(b"zz", b"aaa")]
+    #[case::digit(b"a9", b"b0")]
+    #[case::grows_upper(b"Zz", b"AAa")]
+    fn string_increment(#[case] from: &[u8], #[case] to: &[u8]) {
+        assert_eq!(increment_string(from), to);
     }
 
     #[test]

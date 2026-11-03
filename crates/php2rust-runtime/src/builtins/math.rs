@@ -135,18 +135,21 @@ pub fn pi(_args: &[Value], _ctx: &mut Context) -> PhpResult<Value> {
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
+
     use super::php_round;
 
-    #[test]
-    fn rounds_like_php() {
-        assert_eq!(php_round(1.23456, 2), 1.23);
-        assert_eq!(php_round(2.5, 0), 3.0);
-        assert_eq!(php_round(-2.5, 0), -3.0);
-        assert_eq!(php_round(1.005, 2), 1.01);
-        assert_eq!(php_round(0.5, 0), 1.0);
-        assert_eq!(php_round(0.4, 0), 0.0);
-        assert_eq!(php_round(9.99, 1), 10.0);
-        assert_eq!(php_round(1234.0, -2), 1200.0);
-        assert_eq!(php_round(1234567.891, 2), 1234567.89);
+    #[rstest]
+    #[case::two_places(1.23456, 2, 1.23)]
+    #[case::half_up(2.5, 0, 3.0)]
+    #[case::half_away_from_zero(-2.5, 0, -3.0)]
+    #[case::pre_rounding(1.005, 2, 1.01)]
+    #[case::half(0.5, 0, 1.0)]
+    #[case::below_half(0.4, 0, 0.0)]
+    #[case::carry(9.99, 1, 10.0)]
+    #[case::negative_places(1234.0, -2, 1200.0)]
+    #[case::large(1234567.891, 2, 1234567.89)]
+    fn rounds_like_php(#[case] value: f64, #[case] places: i64, #[case] expected: f64) {
+        assert_eq!(php_round(value, places), expected);
     }
 }

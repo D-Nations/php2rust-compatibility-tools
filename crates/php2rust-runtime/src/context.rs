@@ -37,14 +37,14 @@ impl Context {
 
     /// Records an `E_WARNING`. Warnings go to stderr rather than into the page.
     pub fn warn(&mut self, message: impl Into<String>) {
-        self.report("Warning", message.into());
+        self.report("Warning", &message.into());
     }
 
     pub fn deprecated(&mut self, message: impl Into<String>) {
-        self.report("Deprecated", message.into());
+        self.report("Deprecated", &message.into());
     }
 
-    fn report(&mut self, level: &str, message: String) {
+    fn report(&mut self, level: &str, message: &str) {
         if self.silence == 0 {
             eprintln!("PHP {level}:  {message}");
             self.warnings.push(format!("{level}: {message}"));

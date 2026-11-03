@@ -690,7 +690,7 @@ fn format_printf(format: &[u8], args: &[Value], ctx: &mut Context) -> PhpResult<
             .unwrap_or(format.len());
         if digits_end > i && at(digits_end) == Some(b'$') {
             let n: usize = std::str::from_utf8(&format[i..digits_end])
-                .unwrap()
+                .expect("ASCII digits are UTF-8")
                 .parse()
                 .unwrap_or(0);
             if n == 0 {

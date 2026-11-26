@@ -13,9 +13,10 @@ history.
 
 | Crate | What it copies from PHP |
 |---|---|
-| [php2rust-value](crates/php2rust-value) | Values (`Value`, `PhpArray` with PHP's key rules, objects with identity), `==` and the string/number conversions, and built-in functions: `json_encode`/`json_decode`, `serialize`, `filter_var`, `parse_str`, `parse_url`, `http_build_query`, `html_entity_decode`, base64, `DateTime`/`DateInterval` and date parsing, BcMath |
+| [php2rust-value](crates/php2rust-value) | Values (`Value`, `PhpArray` with PHP's key rules, objects with identity), `==` and the string/number conversions, and built-in functions: `json_encode`/`json_decode`, `serialize`, `var_dump`, `filter_var`, `parse_str`, `parse_url`, `http_build_query`, `html_entity_decode`, base64, `DateTime`/`DateInterval` and date parsing, BcMath |
 | [php2rust-regex](crates/php2rust-regex) | `preg_*` patterns (delimiters, modifiers, PCRE2 syntax), translated to `fancy-regex`; what cannot be translated is refused |
 | [php2rust-date](crates/php2rust-date) | The date extension: `DateTimeImmutable`, `DateTimeZone` (IANA zones from jiff's bundled tzdb), the date text parser, `modify()`, `format()`, `createFromFormat()`, the default time zone |
+| [php2rust-iconv](crates/php2rust-iconv) | `iconv()` as glibc converts: UTF-8, UTF-16, UTF-32, UCS-2, ASCII, ISO-8859-1, ISO-8859-15, Windows-1252, ISO-2022-JP; other charsets are refused |
 | [php2rust-dom](crates/php2rust-dom) | A part of the DOM extension (`DOMDocument::loadXML()`, the read API, `schemaValidateSource()`, a `DOMXPath::evaluate()` subset) with libxml's diagnostics |
 | [php2rust-runtime](crates/php2rust-runtime) | The runtime for Rust code that the php2rust converter generates: `Value` with type juggling, copy-on-write `PhpArray`, byte strings, `<=>` and number rules, a per-request `Context`, and string, array and math built-ins |
 

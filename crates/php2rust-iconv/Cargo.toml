@@ -1,0 +1,17 @@
+[package]
+name = "php2rust-iconv"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "PHP's iconv() between UTF-8, the Unicode encodings, ASCII, Latin-1, Latin-9, Windows-1252 and ISO-2022-JP, as glibc's iconv converts, written from PHP's observed behaviour"
+
+[dependencies]
+# The JIS X 0208 tables of ISO-2022-JP.
+encoding_rs = "0.8.35"
+
+[dev-dependencies]
+serde_json = "1.0.154"
+
+[lints]
+workspace = true

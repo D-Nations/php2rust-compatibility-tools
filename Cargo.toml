@@ -4,6 +4,7 @@ members = [
     "crates/php2rust-regex",
     "crates/php2rust-dom",
     "crates/php2rust-date",
+    "crates/php2rust-iconv",
     "crates/php2rust-runtime",
 ]
 resolver = "3"

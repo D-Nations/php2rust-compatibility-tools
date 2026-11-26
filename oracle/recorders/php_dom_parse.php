@@ -1,7 +1,7 @@
 <?php
 // What libxml (through PHP's DOM extension) answers for a corpus of valid
-// and malformed XML, for crates/php-dom/tests/data/parse.json
-// (scripts/record.sh php-dom). Each case is loaded three ways:
+// and malformed XML, for crates/php2rust-dom/tests/data/parse.json
+// (scripts/record.sh dom). Each case is loaded three ways:
 //
 //   "utils"  Symfony's XmlUtils::parse(): the DOMDocument settings it uses
 //            (validateOnParse, LIBXML_NONET | LIBXML_COMPACT), the errors
@@ -423,7 +423,7 @@ $add('doctype pi xml', '<!DOCTYPE a [<?xml x?>]><a/>');
 
 // Upstream's XML fixtures and the demo's translations.
 $files = [];
-foreach (['/work/upstream/symfony/config/Tests/Fixtures', '/work/upstream/symfony/translation/Tests/Fixtures', '/work/upstream/symfony/validator/Tests', '/demo/translations'] as $dir) {
+foreach (['/upstream/symfony/config/Tests/Fixtures', '/upstream/symfony/translation/Tests/Fixtures', '/upstream/symfony/validator/Tests', '/demo/translations'] as $dir) {
     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS));
     foreach ($it as $file) {
         if (preg_match('/\.(xml|xlf|xliff|ts)$/', $file->getFilename()) && $file->getSize() > 0 && $file->getSize() < 200_000) {
@@ -433,7 +433,7 @@ foreach (['/work/upstream/symfony/config/Tests/Fixtures', '/work/upstream/symfon
 }
 sort($files);
 foreach ($files as $file) {
-    $add('file ' . preg_replace('#^/work/upstream/|^/#', '', $file), file_get_contents($file));
+    $add('file ' . preg_replace('#^/upstream/|^/#', '', $file), file_get_contents($file));
 }
 
 // The tree in document order, one row per node, each starting with the

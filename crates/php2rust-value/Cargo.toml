@@ -1,5 +1,5 @@
 [package]
-name = "php-value"
+name = "php2rust-value"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -14,7 +14,7 @@ vectors = ["dep:serde_json"]
 serde_json = { version = "1.0.154", optional = true }
 
 [dev-dependencies]
-php-value = { path = ".", features = ["vectors"] }
+php2rust-value = { path = ".", features = ["vectors"] }
 serde_json = { version = "1.0.154", features = ["unbounded_depth"] }
 
 [lints]

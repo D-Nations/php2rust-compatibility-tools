@@ -1,10 +1,10 @@
 //! `html_entity_decode()` and `json_decode()` against PHP 8.4.27's answers
 //! recorded by `oracle/recorders/php_value_html_entity_decode.php` and
-//! `php_value_json_decode.php` (`scripts/record.sh php-value-decode`).
+//! `php_value_json_decode.php` (`scripts/record.sh value-decode`).
 //!
 //! Upstream: none
 
-use php_value::{
+use php2rust_value::{
     Value,
     html::html_entity_decode,
     json::{JsonError, decode_assoc},

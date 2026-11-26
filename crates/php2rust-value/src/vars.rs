@@ -5,7 +5,7 @@
 //! "Arrays", `parse_str()`) and PHP 8.4.27's recorded answers:
 //! crates/http-foundation's request vectors (`scripts/record.sh
 //! request-vars`) for the name rules, and `parse_str()`'s own vectors
-//! (`tests/data/parse_str.json`, `scripts/record.sh parse-str`). No PHP
+//! (`tests/data/parse_str.json`, `scripts/record.sh value`). No PHP
 //! source code is used (PLAN.md decision 8). The rules were first written
 //! for crates/http-foundation's `query.rs` (M1-D request rewrite) and moved
 //! here, unchanged, so `parse_str()` shares them.

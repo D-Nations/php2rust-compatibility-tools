@@ -1,6 +1,6 @@
 <?php
-// parse_str() for crates/php-value/tests/data/parse_str.json
-// (scripts/record.sh php-value). Inputs: every raw string of the request
+// parse_str() for crates/php2rust-value/tests/data/parse_str.json
+// (scripts/record.sh value). Inputs: every raw string of the request
 // vectors (crates/http-foundation/tests/data/query_vectors.json) and the
 // cases below. Each case is [input (base64), typed result]; warnings are
 // not recorded.

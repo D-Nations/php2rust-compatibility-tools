@@ -1,9 +1,9 @@
 //! `filter_var()` against PHP 8.4.27's answers recorded by
-//! `oracle/recorders/filter_var.php` (`scripts/record.sh php-value`).
+//! `oracle/recorders/filter_var.php` (`scripts/record.sh value`).
 //!
 //! Upstream: none
 
-use php_value::{
+use php2rust_value::{
     Key, PhpArray, PhpString, Value,
     filter::{CONSTANTS, filter_var},
     object::Closure,
@@ -26,7 +26,7 @@ fn callback(name: &str) -> Result<Value, vectors::Error> {
             Value::Array(array)
         }),
         "int" => Closure::object(|args| {
-            Value::Int(php_value::numeric::string_to_int(
+            Value::Int(php2rust_value::numeric::string_to_int(
                 args.first()
                     .and_then(Value::to_php_string)
                     .unwrap_or_default()

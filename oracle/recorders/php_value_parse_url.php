@@ -1,6 +1,6 @@
 <?php
-// parse_url() answers for crates/php-value/tests/data/parse_url.json
-// (scripts/record.sh php-value): hand-picked URLs (the RequestContext
+// parse_url() answers for crates/php2rust-value/tests/data/parse_url.json
+// (scripts/record.sh value): hand-picked URLs (the RequestContext
 // tests' and the shapes PHP's manual describes), then generated strings
 // over the characters parse_url() treats specially, then generated
 // scheme/authority/path/query/fragment combinations. Each case is the input

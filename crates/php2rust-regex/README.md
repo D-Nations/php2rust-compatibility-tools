@@ -1,4 +1,4 @@
-# php-pcre
+# php2rust-regex
 
 Private workspace crate: PHP's `preg_*` patterns translated into
 `fancy-regex`, moved out of symfony-finder so that symfony-string can use

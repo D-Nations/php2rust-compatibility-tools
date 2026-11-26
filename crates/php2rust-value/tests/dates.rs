@@ -12,7 +12,7 @@
     reason = "test helpers; a panic is a test failure"
 )]
 
-use php_value::{base64, dateparse, datetime::gmdate};
+use php2rust_value::{base64, dateparse, datetime::gmdate};
 use serde_json::Value as Json;
 
 fn data() -> Json {

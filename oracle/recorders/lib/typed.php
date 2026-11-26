@@ -1,6 +1,6 @@
 <?php
 // Encodes PHP values as typed JSON for the Rust vector readers
-// (php_value::vectors). Floats as IEEE 754 bits, strings as base64.
+// (php2rust_value::vectors). Floats as IEEE 754 bits, strings as base64.
 
 function typed_value(mixed $v): array
 {

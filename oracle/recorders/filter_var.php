@@ -1,6 +1,6 @@
 <?php
-// filter_var() behaviour for crates/php-value/tests/data/filter.json
-// (scripts/record.sh php-value). Each case is [value, filter, options,
+// filter_var() behaviour for crates/php2rust-value/tests/data/filter.json
+// (scripts/record.sh value). Each case is [value, filter, options,
 // result] in typed() form; options name their callback (see $callbacks)
 // instead of carrying a closure.
 

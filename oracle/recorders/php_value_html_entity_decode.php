@@ -1,7 +1,7 @@
 <?php
 // html_entity_decode($string) answers (PHP's default flags) for
-// crates/php-value/tests/data/html_entity_decode.json (scripts/record.sh
-// php-value-decode): every named entity of the translation table, with and
+// crates/php2rust-value/tests/data/html_entity_decode.json (scripts/record.sh
+// value-decode): every named entity of the translation table, with and
 // without its ";" and in other cases; every numeric reference from 0 to
 // 0x10FFFF in steps that cover each boundary, decimal and hex, with
 // leading zeros and overflowing digits; then generated strings of

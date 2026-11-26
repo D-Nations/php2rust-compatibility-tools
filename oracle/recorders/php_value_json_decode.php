@@ -1,8 +1,8 @@
 <?php
 // json_decode($json, true, 512, JSON_BIGINT_AS_STRING | JSON_THROW_ON_ERROR)
 // answers, and the same without JSON_BIGINT_AS_STRING, for
-// crates/php-value/tests/data/json_decode.json (scripts/record.sh
-// php-value-decode), as Request::toArray() and getPayload() call it:
+// crates/php2rust-value/tests/data/json_decode.json (scripts/record.sh
+// value-decode), as Request::toArray() and getPayload() call it:
 // hand-picked documents (numbers at the 64-bit edges, every escape,
 // surrogates, UTF-8 edges, control bytes in and out of strings, repeated
 // and numeric keys, depth at the limit), then generated documents and

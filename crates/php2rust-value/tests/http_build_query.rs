@@ -1,12 +1,12 @@
 //! `http_build_query_with()` against PHP 8.4.27's answers recorded by
 //! `oracle/recorders/php_value_http_build_query.php` (`scripts/record.sh
-//! php-value`): hand-picked and generated arrays (every scalar type,
+//! value`): hand-picked and generated arrays (every scalar type,
 //! floats, nested and empty arrays, int and special-character keys), each
 //! with `PHP_QUERY_RFC1738` and `PHP_QUERY_RFC3986`.
 //!
 //! Upstream: none
 
-use php_value::{
+use php2rust_value::{
     Value,
     url::{QueryEncoding, http_build_query_with},
     vectors,

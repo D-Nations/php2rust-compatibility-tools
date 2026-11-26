@@ -1,7 +1,7 @@
 <?php
 // What libxml (through PHP's DOM extension) answers when a document is
-// validated against an XML Schema, for crates/php-dom/tests/data/schema.json
-// (scripts/record.sh php-dom-schema).
+// validated against an XML Schema, for crates/php2rust-dom/tests/data/schema.json
+// (scripts/record.sh dom-schema).
 //
 // Every document is loaded as XmlUtils::parse() loads it (validateOnParse,
 // LIBXML_NONET | LIBXML_COMPACT, normalizeDocument()), then validated with
@@ -28,7 +28,7 @@ require '/demo/vendor/autoload.php';
 
 use Symfony\Component\Translation\Util\XliffUtils;
 
-$up = '/work/upstream/symfony';
+$up = '/upstream/symfony';
 
 // ---------------------------------------------------------------- schemas
 $schemas = [];
@@ -659,14 +659,14 @@ $xliffSchema = static function (string $xml): ?string {
 foreach ([...$files($up . '/translation/Tests/Fixtures', '/\.(xlf|xliff)$/'), ...$files('/demo/translations', '/\.xlf$/')] as $file) {
     $xml = file_get_contents($file);
     if ($id = $xliffSchema($xml)) {
-        $add($id, 'file ' . preg_replace('#^/work/upstream/|^/#', '', $file), $xml);
+        $add($id, 'file ' . preg_replace('#^/upstream/|^/#', '', $file), $xml);
     }
 }
 foreach ($files($up . '/validator/Tests/Mapping/Loader', '/^constraint-mapping.*\.xml$|^withdoctype\.xml$/') as $file) {
-    $add('constraint-mapping', 'file ' . preg_replace('#^/work/upstream/#', '', $file), file_get_contents($file));
+    $add('constraint-mapping', 'file ' . preg_replace('#^/upstream/#', '', $file), file_get_contents($file));
 }
 foreach ($files($up . '/config/Tests/Fixtures/Util', '/\.xml$/') as $file) {
-    $add('config-util', 'file ' . preg_replace('#^/work/upstream/#', '', $file), file_get_contents($file));
+    $add('config-util', 'file ' . preg_replace('#^/upstream/#', '', $file), file_get_contents($file));
 }
 foreach (['<book><title>T</title><author>A</author></book>', '<book><title>T</title></book>', '<book><author>A</author><title>T</title></book>', '<library/>'] as $i => $xml) {
     $add('validator-example', "XmlValidatorTest-like #$i", $xml);

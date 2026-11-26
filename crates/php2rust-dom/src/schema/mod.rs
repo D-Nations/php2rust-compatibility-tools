@@ -2,7 +2,7 @@
 //! parsed document, with the diagnostics libxml 2.9.14 reports, for the
 //! schema features Symfony's schemas use (inventory in
 //! docs/milestones/m1-c-xml-x2.md). Written from PHP's observed behaviour
-//! (`scripts/record.sh php-dom-schema`) and the XML Schema 1.0
+//! (`scripts/record.sh dom-schema`) and the XML Schema 1.0
 //! recommendation; no PHP or libxml source is used (PLAN.md decisions 8
 //! and 9).
 //!

@@ -1,5 +1,5 @@
 [package]
-name = "php-dom"
+name = "php2rust-dom"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
@@ -9,7 +9,7 @@ description = "The subset of PHP's DOM extension Symfony's XML loaders use, with
 [dependencies]
 
 [dev-dependencies]
-php-value = { path = "../php-value" }
+php2rust-value = { path = "../php2rust-value" }
 serde_json = "1.0.154"
 
 [lints]

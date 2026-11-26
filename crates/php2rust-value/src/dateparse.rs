@@ -9,7 +9,7 @@
 //! other text: such a text is refused, never approximated. Written from
 //! the PHP manual ("Supported Date and Time Formats", `createFromFormat()`)
 //! and checked on the answers PHP 8.4.27 gave in the oracle
-//! (tests/data/dates.json, `scripts/record.sh http-foundation`): wrong week
+//! (tests/data/dates.json, `scripts/record.sh value-dates`): wrong week
 //! days move the date forward to that day, two-digit years 0-69 are 20xx
 //! and 70-99 19xx in `strtotime()` (but stay as written in
 //! `createFromFormat()`), out-of-range days and times roll over where PHP

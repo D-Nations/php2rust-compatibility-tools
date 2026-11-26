@@ -1,6 +1,6 @@
 <?php
-// PHP value behaviour for crates/php-value/tests/data/php.json
-// (scripts/record.sh php-value). Floats travel as 16 hex digits of their
+// PHP value behaviour for crates/php2rust-value/tests/data/php.json
+// (scripts/record.sh value). Floats travel as 16 hex digits of their
 // IEEE 754 bits; every other value as [type, value] from typed().
 
 error_reporting(E_ALL & ~E_WARNING & ~E_DEPRECATED);

@@ -1,5 +1,5 @@
 [package]
-name = "php-pcre"
+name = "php2rust-regex"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"

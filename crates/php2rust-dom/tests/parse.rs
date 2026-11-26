@@ -1,4 +1,4 @@
-//! Replays tests/data/parse.json (scripts/record.sh php-dom): for every
+//! Replays tests/data/parse.json (scripts/record.sh dom): for every
 //! recorded document, what `DOMDocument::loadXML()` answered in PHP 8.4.27
 //! with libxml 2.9.14, once with `XmlUtils`'s settings (`validateOnParse`)
 //! and once plain: whether it loaded, `libxml_get_errors()`, and the tree.
@@ -17,7 +17,7 @@
 
 use std::collections::BTreeMap;
 
-use php_dom::{Document, LoadError, LoadOptions, NodeId, NodeType, load_xml};
+use php2rust_dom::{Document, LoadError, LoadOptions, NodeId, NodeType, load_xml};
 use serde_json::{Value, json};
 
 /// Cases answered differently, and why. `refused`: this crate refuses
@@ -76,7 +76,7 @@ const KNOWN: &[(&str, &str)] = &[
 
 fn input(case: &Value) -> Vec<u8> {
     match case["input"].as_str() {
-        Some(b64) => php_value::base64::decode_strict(b64.as_bytes()).expect("base64"),
+        Some(b64) => php2rust_value::base64::decode_strict(b64.as_bytes()).expect("base64"),
         None => match case["name"].as_str() {
             Some("attribute value 20 MB") => {
                 let mut v = b"<a x=\"".to_vec();

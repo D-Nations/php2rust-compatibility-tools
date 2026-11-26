@@ -1,4 +1,4 @@
-//! Replays tests/data/schema.json (scripts/record.sh php-dom-schema): for
+//! Replays tests/data/schema.json (scripts/record.sh dom-schema): for
 //! every recorded document, what `DOMDocument::schemaValidateSource()`
 //! answered in PHP 8.4.27 with libxml 2.9.14 after `XmlUtils`'s
 //! `loadXML()`: the result and every `libxml_get_errors()` entry.
@@ -17,7 +17,7 @@
 
 use std::collections::{BTreeMap, HashMap};
 
-use php_dom::{LoadOptions, Schema, SchemaError, load_xml};
+use php2rust_dom::{LoadOptions, Schema, SchemaError, load_xml};
 use serde_json::{Value, json};
 
 /// The document URL PHP gave documents loaded from a string: the
@@ -52,12 +52,12 @@ const KNOWN: &[(&str, &str, &str)] = &[
 fn bytes(case: &Value) -> Vec<u8> {
     match (case["xml"].as_str(), case["xml64"].as_str()) {
         (Some(x), _) => x.as_bytes().to_vec(),
-        (None, Some(b)) => php_value::base64::decode_strict(b.as_bytes()).expect("base64"),
+        (None, Some(b)) => php2rust_value::base64::decode_strict(b.as_bytes()).expect("base64"),
         _ => panic!("case without input"),
     }
 }
 
-fn errors_json(errors: &[php_dom::LibxmlError]) -> Vec<Value> {
+fn errors_json(errors: &[php2rust_dom::LibxmlError]) -> Vec<Value> {
     errors
         .iter()
         .map(|e| {
@@ -168,7 +168,7 @@ fn recorded_schema_validation() {
     );
 }
 
-fn refusal(source: &str) -> php_dom::RefusalReason {
+fn refusal(source: &str) -> php2rust_dom::RefusalReason {
     match Schema::parse(source.as_bytes(), &mut |_| None) {
         Err(SchemaError::Refused(r)) => r.reason,
         other => panic!("not refused: {other:?}"),
@@ -187,7 +187,7 @@ fn imports_come_only_from_the_resolver() {
     match r {
         Err(SchemaError::Refused(r)) => assert_eq!(
             r.reason,
-            php_dom::RefusalReason::UnresolvedImport {
+            php2rust_dom::RefusalReason::UnresolvedImport {
                 location: "file:///etc/passwd".into()
             }
         ),
@@ -213,7 +213,10 @@ fn unsupported_schema_constructs_are_refused() {
     ] {
         let reason = refusal(&xs(body));
         assert!(
-            matches!(reason, php_dom::RefusalReason::UnsupportedSchema { .. }),
+            matches!(
+                reason,
+                php2rust_dom::RefusalReason::UnsupportedSchema { .. }
+            ),
             "{body}: {reason:?}"
         );
     }

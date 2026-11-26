@@ -1,12 +1,12 @@
 //! `json_encode()` and `json_decode()` to objects against PHP 8.4.27's
 //! answers recorded by `oracle/recorders/php_value_json.php`
-//! (`scripts/record.sh php-value-json`).
+//! (`scripts/record.sh value-json`).
 //!
 //! Upstream: none
 
 use std::sync::Arc;
 
-use php_value::{
+use php2rust_value::{
     PhpArray, PhpObject, PhpString, Thrown, Value,
     json::{EncodeFailure, JSON_HEX_TAG, JsonError, decode_object, encode},
     object::StdClass,
@@ -75,9 +75,9 @@ fn prepare(value: Value) -> Value {
                 Value::Object(Arc::new(SerializableThrows(object.properties())))
             }
             StdClass::CLASS => StdClass::object(map(&object.properties())),
-            "ArrayObject" => Value::Object(Arc::new(php_value::object::ArrayObject::new(map(
-                &object.properties(),
-            )))),
+            "ArrayObject" => Value::Object(Arc::new(php2rust_value::object::ArrayObject::new(
+                map(&object.properties()),
+            ))),
             _ => Value::Object(object),
         },
         other => other,

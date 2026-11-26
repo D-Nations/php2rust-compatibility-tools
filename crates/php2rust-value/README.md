@@ -4,7 +4,7 @@ Private workspace crate: PHP's values and the engine behaviour that
 symfony-rs components depend on (PLAN.md decision 3). MIT. No PHP source
 code is used: every rule here is written from PHP 8.4.27's observed
 behaviour and checked against vectors recorded in the oracle container
-(`scripts/record.sh php-value` → `tests/data/php.json`).
+(`scripts/record.sh value` → `tests/data/php.json`).
 
 | Contract | Evidence |
 |---|---|

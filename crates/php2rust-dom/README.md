@@ -1,11 +1,11 @@
-# php-dom
+# php2rust-dom
 
 Private workspace crate (PLAN.md decision 9): the part of PHP's DOM
 extension that Symfony's XML consumers use, with the diagnostics libxml
 reports while parsing and validating against an XML Schema. MIT. No PHP or libxml source is used: every rule is
 written from PHP 8.4.27's observed behaviour on libxml 2.9.14, recorded in
-the oracle (`scripts/record.sh php-dom` → `tests/data/parse.json`,
-`scripts/record.sh php-dom-schema` → `tests/data/schema.json`), and the
+the oracle (`scripts/record.sh dom` → `tests/data/parse.json`,
+`scripts/record.sh dom-schema` → `tests/data/schema.json`), and the
 XML 1.0, Namespaces and XML Schema 1.0 specifications. Stage logs:
 [m1-c-xml-x1.md](../../docs/milestones/m1-c-xml-x1.md) (parser),
 [m1-c-xml-x2.md](../../docs/milestones/m1-c-xml-x2.md) (schemas).

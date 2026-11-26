@@ -1,5 +1,5 @@
 //! PHP 8.4.27's behaviour recorded by `oracle/recorders/php_value.php`
-//! (`scripts/record.sh php-value`).
+//! (`scripts/record.sh value`).
 //!
 //! Upstream: none
 #![allow(
@@ -7,7 +7,7 @@
     reason = "the tests build bytes and code points from known small values"
 )]
 
-use php_value::{
+use php2rust_value::{
     Key, PhpArray, Value,
     json::{JsonFlags, encode_string},
     numeric::{
@@ -118,7 +118,7 @@ fn string_casts_and_is_numeric_match_php() -> TestResult {
     Ok(())
 }
 
-fn build(label: &str) -> Result<PhpArray, php_value::NextElementOccupied> {
+fn build(label: &str) -> Result<PhpArray, php2rust_value::NextElementOccupied> {
     let mut a = PhpArray::new();
     match label {
         "empty" => {}
@@ -130,7 +130,7 @@ fn build(label: &str) -> Result<PhpArray, php_value::NextElementOccupied> {
         }
         "after string key" => a.insert("k", "a".into()),
         "after unset of the last" => {
-            a = php_value::php_array!["a", "b", "c"];
+            a = php2rust_value::php_array!["a", "b", "c"];
             a.remove(&Key::Int(2));
         }
         "after \"7\"" => a.insert("7", "a".into()),
@@ -256,14 +256,14 @@ fn json_encode_of_strings_matches_php() -> TestResult {
 }
 
 fn recorder_classes() -> (
-    php_value::serialize::Classes,
-    php_value::constants::Registry,
+    php2rust_value::serialize::Classes,
+    php2rust_value::constants::Registry,
 ) {
-    use php_value::{constants::Registry, object::EnumCase, serialize::Classes};
+    use php2rust_value::{constants::Registry, object::EnumCase, serialize::Classes};
     let mut classes = Classes::new();
     classes.allow_with_defaults(
         "RecorderAllowed",
-        php_value::php_array!["a" => "foo", "b" => 1],
+        php2rust_value::php_array!["a" => "foo", "b" => 1],
     );
     let mut constants = Registry::with_core();
     constants.define_enum(
@@ -284,9 +284,9 @@ fn recorder_classes() -> (
 fn serialize_matches_php() -> TestResult {
     let json = vectors()?;
     for row in rows(&json, "serialize")? {
-        let value = php_value::vectors::decode(&row[0]).map_err(|e| e.to_string())?;
+        let value = php2rust_value::vectors::decode(&row[0]).map_err(|e| e.to_string())?;
         let expected = base64(&row[1])?;
-        let actual = php_value::serialize::serialize(&value);
+        let actual = php2rust_value::serialize::serialize(&value);
         assert_eq!(
             actual.as_bytes(),
             expected.as_slice(),
@@ -303,7 +303,7 @@ fn unserialize_matches_php_with_an_allow_list() -> TestResult {
     for row in rows(&json, "unserialize")? {
         let input = base64(&row[0])?;
         let shown = String::from_utf8_lossy(&input).into_owned();
-        let actual = php_value::serialize::unserialize(&input, &classes, &constants);
+        let actual = php2rust_value::serialize::unserialize(&input, &classes, &constants);
         if row[1][0] == "false" {
             assert!(
                 actual.is_none(),
@@ -311,11 +311,11 @@ fn unserialize_matches_php_with_an_allow_list() -> TestResult {
             );
             continue;
         }
-        let expected = php_value::vectors::decode(&row[1]).map_err(|e| e.to_string())?;
+        let expected = php2rust_value::vectors::decode(&row[1]).map_err(|e| e.to_string())?;
         let actual = actual.ok_or_else(|| format!("unserialize({shown:?}) failed"))?;
         assert_eq!(actual.debug_type(), expected.debug_type(), "{shown:?}");
         assert!(
-            php_value::vectors::phpunit_equals(&expected, &actual),
+            php2rust_value::vectors::phpunit_equals(&expected, &actual),
             "unserialize({shown:?}): {actual:?} vs {expected:?}"
         );
     }

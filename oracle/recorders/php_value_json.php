@@ -1,7 +1,7 @@
 <?php
 // json_encode($value, $flags, $depth) and json_decode($json) (objects as
-// stdClass) answers, for crates/php-value/tests/data/json_encode.json
-// (scripts/record.sh php-value-json).
+// stdClass) answers, for crates/php2rust-value/tests/data/json_encode.json
+// (scripts/record.sh value-json).
 //
 // "encode": hand-picked values (float layouts, every escape and flag,
 // invalid UTF-8 pieces, errors that stop the encoding and errors that do

@@ -1,7 +1,7 @@
 <?php
 // http_build_query($data, '', $separator, $encoding) answers for
-// crates/php-value/tests/data/http_build_query.json (scripts/record.sh
-// php-value): hand-picked arrays (scalars of every type, floats, nested
+// crates/php2rust-value/tests/data/http_build_query.json (scripts/record.sh
+// value): hand-picked arrays (scalars of every type, floats, nested
 // and empty arrays, int and special-character keys), then generated ones,
 // each with both encodings. An entry is [data, separator (base64),
 // rfc3986, result (base64)], data typed as lib/typed.php does.

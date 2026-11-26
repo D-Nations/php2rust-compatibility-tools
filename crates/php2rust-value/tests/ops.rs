@@ -5,7 +5,7 @@
 
 use std::cmp::Ordering;
 
-use php_value::{
+use php2rust_value::{
     PhpArray, Value,
     ops::{add, bit_and, compare, concat, div, float_to_int, modulo, mul, neg, pow, sub, to_int},
 };
@@ -14,7 +14,7 @@ fn s(text: &str) -> Value {
     Value::from(text)
 }
 
-fn error(result: Result<Value, php_value::Thrown>) -> String {
+fn error(result: Result<Value, php2rust_value::Thrown>) -> String {
     let e = result
         .err()
         .map(|e| format!("{}: {}", e.class, e.message.to_string_lossy()));
@@ -22,7 +22,7 @@ fn error(result: Result<Value, php_value::Thrown>) -> String {
 }
 
 #[allow(clippy::needless_pass_by_value, reason = "takes the call result as is")]
-fn int(result: Result<Value, php_value::Thrown>) -> Option<i64> {
+fn int(result: Result<Value, php2rust_value::Thrown>) -> Option<i64> {
     match result {
         Ok(Value::Int(i)) => Some(i),
         _ => None,
@@ -30,7 +30,7 @@ fn int(result: Result<Value, php_value::Thrown>) -> Option<i64> {
 }
 
 #[allow(clippy::needless_pass_by_value, reason = "takes the call result as is")]
-fn float(result: Result<Value, php_value::Thrown>) -> Option<f64> {
+fn float(result: Result<Value, php2rust_value::Thrown>) -> Option<f64> {
     match result {
         Ok(Value::Float(f)) => Some(f),
         _ => None,

@@ -1,6 +1,6 @@
 <?php
 // The date functions Cookie and HeaderBag call, for
-// crates/php-value/tests/data/dates.json (scripts/record.sh http-foundation):
+// crates/php2rust-value/tests/data/dates.json (scripts/record.sh value-dates):
 // strtotime($text, BASE) over a corpus, DateTimeImmutable::createFromFormat
 // (DATE_RFC2822, $text) (HeaderBag::getDate()), and gmdate(DATE_COOKIE-like
 // formats) over timestamps. Texts are base64. The default time zone is

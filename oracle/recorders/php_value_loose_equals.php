@@ -1,6 +1,6 @@
 <?php
-// `$a == $b` answers for crates/php-value/tests/data/loose_equals.json
-// (scripts/record.sh php-value): every ordered pair of a pool of values
+// `$a == $b` answers for crates/php2rust-value/tests/data/loose_equals.json
+// (scripts/record.sh value): every ordered pair of a pool of values
 // (null, bools, ints, floats, numeric and other strings, arrays, objects
 // with and without __toString()). An entry is [a, b, a == b, warned],
 // values typed as lib/typed.php does; a Text object (which implements

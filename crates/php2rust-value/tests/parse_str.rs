@@ -1,11 +1,11 @@
 //! `parse_str()` against PHP 8.4.27's answers recorded by
 //! `oracle/recorders/php_value_parse_str.php` (`scripts/record.sh
-//! php-value`): every raw input of the request vectors plus nesting,
+//! value`): every raw input of the request vectors plus nesting,
 //! `max_input_vars` and key cases.
 //!
 //! Upstream: none
 
-use php_value::{Value, vars::parse_str, vectors};
+use php2rust_value::{Value, vars::parse_str, vectors};
 use serde_json::Value as Json;
 
 /// `===` on the decoded values: same types, same keys in the same order.

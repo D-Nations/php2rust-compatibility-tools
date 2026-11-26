@@ -1,0 +1,19 @@
+[package]
+name = "php2rust-date"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "PHP's date extension (DateTimeImmutable, DateTimeZone, the date text parser, format(), createFromFormat()), written from PHP's manual and observed behaviour"
+
+[dependencies]
+php2rust-value = { path = "../php2rust-value" }
+# IANA time zones from the bundled tzdb, so the answers do not depend on
+# the host's zoneinfo files (PHP bundles its own copy of the database).
+jiff = { version = "1.0.3", default-features = false, features = ["std", "tzdb-bundle-always"] }
+
+[dev-dependencies]
+serde_json = "1.0.154"
+
+[lints]
+workspace = true

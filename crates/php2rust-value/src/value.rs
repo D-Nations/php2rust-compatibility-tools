@@ -101,6 +101,15 @@ pub trait PhpObject: Any + Send + Sync + fmt::Debug {
     fn traverse(&self) -> Option<Result<Vec<(Value, Value)>, Thrown>> {
         None
     }
+
+    /// The class's own comparison, for `==`, `<`, `<=>` and the others
+    /// against `other` (PHP's dates compare their instants, whatever the
+    /// zone or class): `Some(order)`, or `None` to compare as plain objects
+    /// (same class: property by property; else uncomparable).
+    fn compare_to(&self, other: &dyn PhpObject) -> Option<std::cmp::Ordering> {
+        let _ = other;
+        None
+    }
 }
 
 /// An exception a PHP method threw: its class, message and code.

@@ -15,6 +15,7 @@ behaviour and checked against vectors recorded in the oracle container
 | `(string)` of floats (`precision = 14`), `var_export()` and `json_encode()` of floats (shortest digits) | 338 vectors |
 | `hexdec()`, `octdec()`: invalid characters skipped, float after overflow | 19 vectors |
 | `filter::filter_var()` for `FILTER_UNSAFE_RAW` (with `FILTER_FLAG_STRIP_LOW`), `FILTER_VALIDATE_INT` (hex, octal, `min_range`/`max_range`), `FILTER_VALIDATE_BOOL`, `FILTER_SANITIZE_NUMBER_INT` and `FILTER_CALLBACK`; `FILTER_REQUIRE_SCALAR`, `FILTER_REQUIRE_ARRAY`, `FILTER_FORCE_ARRAY`, `FILTER_NULL_ON_FAILURE`, `default`; the extension's constants. Any other filter, flag or option is refused (`Unsupported`) | 22,932 recorded calls (`tests/data/filter.json`, oracle/recorders/filter_var.php) and the constants' values |
+| `object::EnumCase::declare()` and `constants::Registry::define_enum()`: cases that know their enum, so `cases()`, `from()` and `tryFrom()` (null for no case; the `TypeError` names `tryFrom()`) can be called on a case; `instanceof UnitEnum`/`BackedEnum`; `enum_exists()` and `cases()` with case-insensitive class names | 3 enums, 36 calls recorded (`tests/data/enums.json`, oracle/recorders/php_value_enums.php) |
 | `object::backed_enum_from()`: `BackedEnum::from()` in coercive mode (int- and string-backed), its `TypeError`/`ValueError` messages; the `E_DEPRECATED` for a truncated float is not reproduced | symfony-http-foundation's 2,450 recorded bag calls |
 | `Handle<T>`: a PHP object handle (cloning gives the same object, `same()` is `===`, `deep_clone()` is `clone`), changed in place behind a mutex; `PartialEq` is PHPUnit's `assertEquals()` (same object or equal values) | Unit tests; symfony-http-foundation's RequestStack and symfony-http-kernel's lifecycle vectors |
 | `clock::time()` and `clock::microtime()` (`microtime(true)`), with `clock::mock()` fixing them per thread as ClockMock does | Unit test; symfony-http-foundation's time-sensitive tests |
@@ -42,6 +43,7 @@ behaviour and checked against vectors recorded in the oracle container
 | `date_interval::DateInterval`: `new DateInterval($duration)` for ISO 8601 durations, PHP's "Unknown or bad format" message, `format()` | 1,602 recorded answers, 419 refused (same file, key `date_interval`) |
 | `bcmath::BcNumber`: `new BcMath\Number($num)` (string or int), its `ValueError`/`TypeError`, string form, `scale`, `<=>` | Unit tests from PHP 8.4.27 with bcmath (not in the oracle image) |
 | `numeric::{float_to_int, int_cast, float_cast}`: `(int)` of a float (modular wrap past the int range) and of any value, `(float)` of any value | doctrine-dbal's integer and float type tests |
+| `PhpObject::compare_to()`: a class's own comparison, used by `compare::loose_equals()` and `ops::compare()` before the plain-object rules (php2rust-date's dates compare instants) | php2rust-date `tests/objects.rs` (64 recorded comparisons) |
 | `object::Closure` (a `\Closure` over a Rust function), `StringableObject`, `PhpObject::to_php_string()` (`\Stringable`), `numeric::numeric_value()` | Unit use in dependants |
 
 Arrays have value semantics: a clone shares storage until one side is

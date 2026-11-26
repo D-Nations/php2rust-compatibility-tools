@@ -1,0 +1,781 @@
+{
+    "dates": [
+        {
+            "class": "DateTimeImmutable",
+            "text": "2010-10-04 13:45",
+            "zone": "Europe/Paris",
+            "array": {
+                "date": "2010-10-04 13:45:00.000000",
+                "timezone_type": 3,
+                "timezone": "Europe/Paris"
+            },
+            "interface": true,
+            "format": "2010-10-04T13:45:00+02:00 000000",
+            "timestamp": 1286192700,
+            "microsecond": 0,
+            "offset": 7200,
+            "timezone": "Europe/Paris"
+        },
+        {
+            "class": "DateTime",
+            "text": "2010-10-04 13:45",
+            "zone": "Europe/Paris",
+            "array": {
+                "date": "2010-10-04 13:45:00.000000",
+                "timezone_type": 3,
+                "timezone": "Europe/Paris"
+            },
+            "interface": true,
+            "format": "2010-10-04T13:45:00+02:00 000000",
+            "timestamp": 1286192700,
+            "microsecond": 0,
+            "offset": 7200,
+            "timezone": "Europe/Paris"
+        },
+        {
+            "class": "DateTime",
+            "text": "2010-10-04 11:45",
+            "zone": "UTC",
+            "array": {
+                "date": "2010-10-04 11:45:00.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "interface": true,
+            "format": "2010-10-04T11:45:00+00:00 000000",
+            "timestamp": 1286192700,
+            "microsecond": 0,
+            "offset": 0,
+            "timezone": "UTC"
+        },
+        {
+            "class": "DateTimeImmutable",
+            "text": "2010-10-04 07:45",
+            "zone": "America/New_York",
+            "array": {
+                "date": "2010-10-04 07:45:00.000000",
+                "timezone_type": 3,
+                "timezone": "America/New_York"
+            },
+            "interface": true,
+            "format": "2010-10-04T07:45:00-04:00 000000",
+            "timestamp": 1286192700,
+            "microsecond": 0,
+            "offset": -14400,
+            "timezone": "America/New_York"
+        },
+        {
+            "class": "DateTimeImmutable",
+            "text": "2010-10-04 13:45:00.5",
+            "zone": "Europe/Paris",
+            "array": {
+                "date": "2010-10-04 13:45:00.500000",
+                "timezone_type": 3,
+                "timezone": "Europe/Paris"
+            },
+            "interface": true,
+            "format": "2010-10-04T13:45:00+02:00 500000",
+            "timestamp": 1286192700,
+            "microsecond": 500000,
+            "offset": 7200,
+            "timezone": "Europe/Paris"
+        },
+        {
+            "class": "DateTime",
+            "text": "2010-10-04 19:45 +08:00",
+            "zone": "UTC",
+            "array": {
+                "date": "2010-10-04 19:45:00.000000",
+                "timezone_type": 1,
+                "timezone": "+08:00"
+            },
+            "interface": true,
+            "format": "2010-10-04T19:45:00+08:00 000000",
+            "timestamp": 1286192700,
+            "microsecond": 0,
+            "offset": 28800,
+            "timezone": "+08:00"
+        },
+        {
+            "class": "DateTimeImmutable",
+            "text": "1964-01-02 03:04",
+            "zone": "Z",
+            "array": {
+                "date": "1964-01-02 03:04:00.000000",
+                "timezone_type": 2,
+                "timezone": "Z"
+            },
+            "interface": true,
+            "format": "1964-01-02T03:04:00+00:00 000000",
+            "timestamp": -189291360,
+            "microsecond": 0,
+            "offset": 0,
+            "timezone": "Z"
+        },
+        {
+            "class": "DateTime",
+            "text": "2016-10-30 02:30",
+            "zone": "Europe/Paris",
+            "array": {
+                "date": "2016-10-30 02:30:00.000000",
+                "timezone_type": 3,
+                "timezone": "Europe/Paris"
+            },
+            "interface": true,
+            "format": "2016-10-30T02:30:00+01:00 000000",
+            "timestamp": 1477791000,
+            "microsecond": 0,
+            "offset": 3600,
+            "timezone": "Europe/Paris"
+        }
+    ],
+    "compare": [
+        {
+            "a": 0,
+            "b": 0,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 0,
+            "b": 1,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 0,
+            "b": 2,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 0,
+            "b": 3,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 0,
+            "b": 4,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 0,
+            "b": 5,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 0,
+            "b": 6,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 0,
+            "b": 7,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 1,
+            "b": 0,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 1,
+            "b": 1,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 1,
+            "b": 2,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 1,
+            "b": 3,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 1,
+            "b": 4,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 1,
+            "b": 5,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 1,
+            "b": 6,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 1,
+            "b": 7,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 2,
+            "b": 0,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 2,
+            "b": 1,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 2,
+            "b": 2,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 2,
+            "b": 3,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 2,
+            "b": 4,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 2,
+            "b": 5,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 2,
+            "b": 6,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 2,
+            "b": 7,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 3,
+            "b": 0,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 3,
+            "b": 1,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 3,
+            "b": 2,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 3,
+            "b": 3,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 3,
+            "b": 4,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 3,
+            "b": 5,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 3,
+            "b": 6,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 3,
+            "b": 7,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 4,
+            "b": 0,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 4,
+            "b": 1,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 4,
+            "b": 2,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 4,
+            "b": 3,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 4,
+            "b": 4,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 4,
+            "b": 5,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 4,
+            "b": 6,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 4,
+            "b": 7,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 5,
+            "b": 0,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 5,
+            "b": 1,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 5,
+            "b": 2,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 5,
+            "b": 3,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 5,
+            "b": 4,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 5,
+            "b": 5,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 5,
+            "b": 6,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 5,
+            "b": 7,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 6,
+            "b": 0,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 6,
+            "b": 1,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 6,
+            "b": 2,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 6,
+            "b": 3,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 6,
+            "b": 4,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 6,
+            "b": 5,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 6,
+            "b": 6,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        },
+        {
+            "a": 6,
+            "b": 7,
+            "eq": false,
+            "lt": true,
+            "gt": false,
+            "cmp": -1
+        },
+        {
+            "a": 7,
+            "b": 0,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 7,
+            "b": 1,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 7,
+            "b": 2,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 7,
+            "b": 3,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 7,
+            "b": 4,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 7,
+            "b": 5,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 7,
+            "b": 6,
+            "eq": false,
+            "lt": false,
+            "gt": true,
+            "cmp": 1
+        },
+        {
+            "a": 7,
+            "b": 7,
+            "eq": true,
+            "lt": false,
+            "gt": false,
+            "cmp": 0
+        }
+    ],
+    "zones": [
+        {
+            "name": "UTC",
+            "array": {
+                "timezone_type": 3,
+                "timezone": "UTC"
+            },
+            "get_name": "UTC"
+        },
+        {
+            "name": "Europe/Paris",
+            "array": {
+                "timezone_type": 3,
+                "timezone": "Europe/Paris"
+            },
+            "get_name": "Europe/Paris"
+        },
+        {
+            "name": "europe/paris",
+            "array": {
+                "timezone_type": 3,
+                "timezone": "europe/paris"
+            },
+            "get_name": "europe/paris"
+        },
+        {
+            "name": "+02:00",
+            "array": {
+                "timezone_type": 1,
+                "timezone": "+02:00"
+            },
+            "get_name": "+02:00"
+        },
+        {
+            "name": "-05:30",
+            "array": {
+                "timezone_type": 1,
+                "timezone": "-05:30"
+            },
+            "get_name": "-05:30"
+        },
+        {
+            "name": "Z",
+            "array": {
+                "timezone_type": 2,
+                "timezone": "Z"
+            },
+            "get_name": "Z"
+        },
+        {
+            "name": "GMT",
+            "array": {
+                "timezone_type": 2,
+                "timezone": "GMT"
+            },
+            "get_name": "GMT"
+        },
+        {
+            "name": "America/New_York",
+            "array": {
+                "timezone_type": 3,
+                "timezone": "America/New_York"
+            },
+            "get_name": "America/New_York"
+        }
+    ],
+    "calls": [
+        {
+            "call": "setTimezone",
+            "arg": "Asia/Hong_Kong",
+            "result": "2010-10-04T19:45:00+08:00 Asia/Hong_Kong"
+        },
+        {
+            "call": "setTimezone",
+            "arg": "UTC",
+            "result": "2010-10-04T11:45:00+00:00 UTC"
+        },
+        {
+            "call": "setTimezone",
+            "arg": "+05:30",
+            "result": "2010-10-04T17:15:00+05:30 +05:30"
+        },
+        {
+            "call": "setTimezone",
+            "arg": "America/Chicago",
+            "result": "2010-10-04T06:45:00-05:00 America/Chicago"
+        },
+        {
+            "call": "modify",
+            "arg": "-1day",
+            "result": "2010-10-03T13:45:00+02:00 Europe/Paris"
+        },
+        {
+            "call": "modify",
+            "arg": "+1 hour",
+            "result": "2010-10-04T14:45:00+02:00 Europe/Paris"
+        },
+        {
+            "call": "modify",
+            "arg": "+1 month",
+            "result": "2010-11-04T13:45:00+01:00 Europe/Paris"
+        },
+        {
+            "call": "modify",
+            "arg": "Bad Date",
+            "result": {
+                "class": "DateMalformedStringException",
+                "message": "DateTimeImmutable::modify(): Failed to parse time string (Bad Date) at position 0 (B): The timezone could not be found in the database"
+            }
+        },
+        {
+            "call": "modify",
+            "arg": "tomorrow",
+            "result": "2010-10-05T00:00:00+02:00 Europe/Paris"
+        }
+    ],
+    "errors": {
+        "format_array": {
+            "class": "TypeError",
+            "message": "DateTimeImmutable::format(): Argument #1 ($format) must be of type string, array given"
+        },
+        "format_null": "",
+        "modify_array": {
+            "class": "TypeError",
+            "message": "DateTimeImmutable::modify(): Argument #1 ($modifier) must be of type string, array given"
+        },
+        "set_timezone_string": {
+            "class": "TypeError",
+            "message": "DateTimeImmutable::setTimezone(): Argument #1 ($timezone) must be of type DateTimeZone, string given"
+        },
+        "datetime_format_array": {
+            "class": "TypeError",
+            "message": "DateTime::format(): Argument #1 ($format) must be of type string, array given"
+        }
+    }
+}

@@ -57,14 +57,18 @@ impl Registry {
     }
 
     /// Registers an enum and its cases, in declaration order; each case is
-    /// also defined as the constant `Class::CASE`.
+    /// also defined as the constant `Class::CASE`. The cases learn their
+    /// enum's cases ([`EnumCase::declare`]).
     pub fn define_enum(&mut self, class: &str, cases: Vec<EnumCase>) {
-        let objects: Vec<Object> = cases.into_iter().map(EnumCase::object).collect();
-        for case in &objects {
-            let name = case
-                .downcast_ref::<EnumCase>()
-                .map(|c| c.name().to_owned())
-                .unwrap_or_default();
+        let declaration: Vec<(String, Option<Value>)> = cases
+            .into_iter()
+            .map(|c| (c.name().to_owned(), c.value().cloned()))
+            .collect();
+        let objects: Vec<Object> = EnumCase::declare(class, &declaration)
+            .into_iter()
+            .map(EnumCase::object)
+            .collect();
+        for (case, (name, _)) in objects.iter().zip(&declaration) {
             self.define(format!("{class}::{name}"), Value::Object(case.clone()));
         }
         self.enums.insert(class.to_owned(), objects);
@@ -81,13 +85,22 @@ impl Registry {
         })
     }
 
-    /// `enum_exists($class)`.
+    /// `enum_exists($class)`. Class names are case-insensitive, as in PHP.
     pub fn enum_exists(&self, class: &str) -> bool {
-        self.enums.contains_key(class)
+        self.cases(class).is_some()
     }
 
-    /// `$class::cases()`.
+    /// `$class::cases()` (case-insensitive class name).
     pub fn cases(&self, class: &str) -> Option<&[Object]> {
-        self.enums.get(class).map(Vec::as_slice)
+        let class = class.trim_start_matches('\\');
+        self.enums
+            .get(class)
+            .or_else(|| {
+                self.enums
+                    .iter()
+                    .find(|(name, _)| name.eq_ignore_ascii_case(class))
+                    .map(|(_, cases)| cases)
+            })
+            .map(Vec::as_slice)
     }
 }

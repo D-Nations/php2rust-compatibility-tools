@@ -19,10 +19,13 @@ re-exports it as `symfony_clock::php`.
 | `createFromTimestamp()` of ints and floats, `DateRangeError` | oracle `timestamps` (636) |
 | `setTime()`, `setDate()`, `setISODate()`, `setTimestamp()`, `setMicrosecond()`, `setTimezone()` | oracle `setters` (264, 5 refused) |
 | `date_default_timezone_get()` / `date_default_timezone_set()` (a process-wide `RwLock`, UTC by default) | oracle `default_timezone` |
+| `object`: `DateTimeImmutable`, `DateTime` (a mutable handle) and `DateTimeZone` as php2rust-value objects: class, `instanceof DateTimeInterface`, `(array)` properties, `format()`, `getTimestamp()`, `getMicrosecond()`, `getOffset()`, `getTimezone()`, `getName()`; `setTimezone()` and `modify()` on `DateTimeImmutable` (new object) and on `DateTime` in place (Rust methods); `==`, `<`, `<=>` by instant across classes and zones (`PhpObject::compare_to`); the `TypeError` of a wrong argument. A null string argument (PHP: `""` and a deprecation) is refused | `tests/data/objects.json` (8 dates, 64 comparisons, 8 zones, 9 calls, 4 errors) |
 | Exception classes and messages (`DateMalformedStringException`, `DateInvalidTimeZoneException`, `DateRangeError`, ...) | the oracle answers compare class and message |
 
 Vectors: `scripts/record.sh date` runs `oracle/recorders/php_date.php` and
 writes `tests/data/php_date.json`; `tests/php_date.rs` replays it.
+`oracle/recorders/php_date_objects.php` writes `tests/data/objects.json`
+(`tests/objects.rs`).
 
 ## Differences
 

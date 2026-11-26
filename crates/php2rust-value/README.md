@@ -42,6 +42,7 @@ behaviour and checked against vectors recorded in the oracle container
 | `date_interval::DateInterval`: `new DateInterval($duration)` for ISO 8601 durations, PHP's "Unknown or bad format" message, `format()` | 1,602 recorded answers, 419 refused (same file, key `date_interval`) |
 | `bcmath::BcNumber`: `new BcMath\Number($num)` (string or int), its `ValueError`/`TypeError`, string form, `scale`, `<=>` | Unit tests from PHP 8.4.27 with bcmath (not in the oracle image) |
 | `numeric::{float_to_int, int_cast, float_cast}`: `(int)` of a float (modular wrap past the int range) and of any value, `(float)` of any value | doctrine-dbal's integer and float type tests |
+| `PhpObject::compare_to()`: a class's own comparison, used by `compare::loose_equals()` and `ops::compare()` before the plain-object rules (php2rust-date's dates compare instants) | php2rust-date `tests/objects.rs` (64 recorded comparisons) |
 | `object::Closure` (a `\Closure` over a Rust function), `StringableObject`, `PhpObject::to_php_string()` (`\Stringable`), `numeric::numeric_value()` | Unit use in dependants |
 
 Arrays have value semantics: a clone shares storage until one side is

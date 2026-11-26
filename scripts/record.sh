@@ -7,7 +7,7 @@
 #   scripts/record.sh value-json   crates/php2rust-value/tests/data/json_encode.json
 #   scripts/record.sh value-dates  crates/php2rust-value/tests/data/dates.json
 #   scripts/record.sh value-args   crates/php2rust-value/tests/data/named_args.json
-#   scripts/record.sh date         crates/php2rust-date/tests/data/php_date.json
+#   scripts/record.sh date         crates/php2rust-date/tests/data/php_date.json, objects.json
 #   scripts/record.sh dom          crates/php2rust-dom/tests/data/parse.json
 #   scripts/record.sh dom-schema   crates/php2rust-dom/tests/data/schema.json
 #   scripts/record.sh all          all of the above
@@ -67,6 +67,7 @@ value_dates() {
 
 php_date() {
     record oracle php_date.php crates/php2rust-date/tests/data/php_date.json 'len(d["parse"]), "date texts,", len(d["modify"]), "modify() calls"'
+    record oracle php_date_objects.php crates/php2rust-date/tests/data/objects.json 'len(d["compare"]), "date comparisons"'
 }
 
 dom() {

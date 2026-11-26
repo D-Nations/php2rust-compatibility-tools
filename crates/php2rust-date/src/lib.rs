@@ -14,6 +14,7 @@ mod datetime;
 mod error;
 mod format;
 mod from_format;
+pub mod object;
 mod parse;
 mod zone;
 

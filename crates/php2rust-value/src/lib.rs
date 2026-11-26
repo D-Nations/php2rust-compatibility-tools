@@ -33,6 +33,7 @@ pub mod serialize;
 pub mod string;
 pub mod url;
 pub mod value;
+pub mod var_dump;
 pub mod vars;
 #[cfg(feature = "vectors")]
 pub mod vectors;

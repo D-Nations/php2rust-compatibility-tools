@@ -70,6 +70,10 @@ value_enums() {
     record oracle php_value_enums.php "$value_dir/enums.json" 'len(d["cases"]), "enum cases"'
 }
 
+value_var_dump() {
+    record oracle php_value_var_dump.php "$value_dir/var_dump.json" 'len(d["cases"]), "var_dump() calls"'
+}
+
 php_date() {
     record oracle php_date.php crates/php2rust-date/tests/data/php_date.json 'len(d["parse"]), "date texts,", len(d["modify"]), "modify() calls"'
     record oracle php_date_objects.php crates/php2rust-date/tests/data/objects.json 'len(d["compare"]), "date comparisons"'
@@ -90,9 +94,10 @@ case "${1:-}" in
     value-dates) value_dates ;;
     value-args) value_args ;;
     value-enums) value_enums ;;
+    value-var-dump) value_var_dump ;;
     date) php_date ;;
     dom) dom ;;
     dom-schema) dom_schema ;;
-    all) value; value_decode; value_json; value_dates; value_args; value_enums; php_date; dom; dom_schema ;;
-    *) echo "usage: scripts/record.sh value|value-decode|value-json|value-dates|value-args|value-enums|date|dom|dom-schema|all" >&2; exit 2 ;;
+    all) value; value_decode; value_json; value_dates; value_args; value_enums; value_var_dump; php_date; dom; dom_schema ;;
+    *) echo "usage: scripts/record.sh value|value-decode|value-json|value-dates|value-args|value-enums|value-var-dump|date|dom|dom-schema|all" >&2; exit 2 ;;
 esac

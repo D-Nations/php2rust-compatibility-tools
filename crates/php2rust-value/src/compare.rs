@@ -19,7 +19,8 @@
 //!   non-public state is not visible here, their string forms too); a
 //!   `\Stringable` object against a string compares its string form as a
 //!   string; an object against an int or float counts as
-//!   1 (PHP warns).
+//!   1 (PHP warns); a class with its own comparison
+//!   ([`crate::PhpObject::compare_to`], dates) is equal when that says so.
 //!
 //! Upstream: none
 
@@ -103,7 +104,9 @@ pub fn loose_equals(a: &Value, b: &Value) -> bool {
         (Array(_), _) | (_, Array(_)) => false,
         (Object(x), Object(y)) => {
             std::ptr::addr_eq(Arc::as_ptr(x), Arc::as_ptr(y))
-                || (x.class() == y.class()
+                || x.compare_to(&**y) == Some(std::cmp::Ordering::Equal)
+                || (x.compare_to(&**y).is_none()
+                    && x.class() == y.class()
                     && arrays_equal(&x.properties(), &y.properties())
                     && hidden_state_equal(x, y))
         }

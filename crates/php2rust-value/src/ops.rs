@@ -371,6 +371,8 @@ pub fn compare(a: &Value, b: &Value) -> Ordering {
         (Object(x), Object(y)) => {
             if std::ptr::addr_eq(std::sync::Arc::as_ptr(x), std::sync::Arc::as_ptr(y)) {
                 Ordering::Equal
+            } else if let Some(order) = x.compare_to(&**y) {
+                order
             } else if x.class() == y.class() {
                 arrays_cmp(&x.properties(), &y.properties())
             } else {

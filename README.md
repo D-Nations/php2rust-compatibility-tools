@@ -6,7 +6,8 @@ code to Rust (by hand or with a converter). Each rule is written from PHP
 from real PHP 8.4.27. No PHP, PCRE or libxml source code is used.
 
 Part of the php2rust project. php2rust-value, php2rust-regex and
-php2rust-dom came from [symfony-rs](https://github.com/D-Nations/symfony-rs),
+php2rust-dom came from [symfony-rs](https://github.com/D-Nations/symfony-rs)
+(php2rust-date from its symfony-clock crate),
 and php2rust-runtime came from the php2rust converter, all with their git
 history.
 
@@ -14,6 +15,7 @@ history.
 |---|---|
 | [php2rust-value](crates/php2rust-value) | Values (`Value`, `PhpArray` with PHP's key rules, objects with identity), `==` and the string/number conversions, and built-in functions: `json_encode`/`json_decode`, `serialize`, `filter_var`, `parse_str`, `parse_url`, `http_build_query`, `html_entity_decode`, base64, `DateTime`/`DateInterval` and date parsing, BcMath |
 | [php2rust-regex](crates/php2rust-regex) | `preg_*` patterns (delimiters, modifiers, PCRE2 syntax), translated to `fancy-regex`; what cannot be translated is refused |
+| [php2rust-date](crates/php2rust-date) | The date extension: `DateTimeImmutable`, `DateTimeZone` (IANA zones from jiff's bundled tzdb), the date text parser, `modify()`, `format()`, `createFromFormat()`, the default time zone |
 | [php2rust-dom](crates/php2rust-dom) | A part of the DOM extension (`DOMDocument::loadXML()`, the read API, `schemaValidateSource()`, a `DOMXPath::evaluate()` subset) with libxml's diagnostics |
 | [php2rust-runtime](crates/php2rust-runtime) | The runtime for Rust code that the php2rust converter generates: `Value` with type juggling, copy-on-write `PhpArray`, byte strings, `<=>` and number rules, a per-request `Context`, and string, array and math built-ins |
 

@@ -7,6 +7,7 @@
 #   scripts/record.sh value-json   crates/php2rust-value/tests/data/json_encode.json
 #   scripts/record.sh value-dates  crates/php2rust-value/tests/data/dates.json
 #   scripts/record.sh value-args   crates/php2rust-value/tests/data/named_args.json
+#   scripts/record.sh date         crates/php2rust-date/tests/data/php_date.json
 #   scripts/record.sh dom          crates/php2rust-dom/tests/data/parse.json
 #   scripts/record.sh dom-schema   crates/php2rust-dom/tests/data/schema.json
 #   scripts/record.sh all          all of the above
@@ -64,6 +65,10 @@ value_dates() {
     record oracle php_value_dates.php "$value_dir/dates.json" '"date vectors"'
 }
 
+php_date() {
+    record oracle php_date.php crates/php2rust-date/tests/data/php_date.json 'len(d["parse"]), "date texts,", len(d["modify"]), "modify() calls"'
+}
+
 dom() {
     record oracle_symfony php_dom_parse.php "$dom_dir/parse.json" '"DOMDocument::loadXML() answers"'
 }
@@ -78,8 +83,9 @@ case "${1:-}" in
     value-json) value_json ;;
     value-dates) value_dates ;;
     value-args) value_args ;;
+    date) php_date ;;
     dom) dom ;;
     dom-schema) dom_schema ;;
-    all) value; value_decode; value_json; value_dates; value_args; dom; dom_schema ;;
-    *) echo "usage: scripts/record.sh value|value-decode|value-json|value-dates|value-args|dom|dom-schema|all" >&2; exit 2 ;;
+    all) value; value_decode; value_json; value_dates; value_args; php_date; dom; dom_schema ;;
+    *) echo "usage: scripts/record.sh value|value-decode|value-json|value-dates|value-args|date|dom|dom-schema|all" >&2; exit 2 ;;
 esac

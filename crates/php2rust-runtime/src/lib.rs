@@ -25,7 +25,7 @@ pub use error::{PhpError, PhpResult};
 pub use string::PhpString;
 pub use value::Value;
 
-/// Everything generated code needs, imported with `use php_rt::prelude::*;`.
+/// Everything generated code needs, imported with `use php2rust_runtime::prelude::*;`.
 pub mod prelude {
     pub use crate::{Context, Key, PhpArray, PhpError, PhpResult, PhpString, Value, builtins, rt};
 }

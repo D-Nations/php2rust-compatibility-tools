@@ -1,4 +1,4 @@
-#![expect(
+#![allow(
     clippy::disallowed_types,
     reason = "PHP arrays have value semantics: copies share storage through Rc and copy on write (Google guide: avoid Rc and Arc, unless the alternative is unreasonably complex)"
 )]

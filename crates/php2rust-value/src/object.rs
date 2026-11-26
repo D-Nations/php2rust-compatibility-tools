@@ -297,14 +297,24 @@ fn array_pairs(storage: &PhpArray) -> Vec<(Value, Value)> {
         .collect()
 }
 
+/// An enum's cases in declaration order: each name and backing value.
+pub type EnumDeclaration = [(String, Option<Value>)];
+
 /// A case of a PHP enum. Cases are singletons in PHP, so `===` compares
 /// the class and the case name.
+///
+/// A case made by [`EnumCase::declare`] (or registered with
+/// [`crate::constants::Registry::define_enum`]) knows its enum's cases, so
+/// the static methods `cases()`, and for a backed enum `from()` and
+/// `tryFrom()`, can be called on it as PHP allows (`$case->cases()`).
 #[derive(Debug, Clone, PartialEq)]
 pub struct EnumCase {
     class: String,
     name: String,
     /// The backing value of a backed enum (`->value`).
     value: Option<Value>,
+    /// The enum's cases in declaration order, when known.
+    declaration: Option<Arc<EnumDeclaration>>,
 }
 
 impl EnumCase {
@@ -313,7 +323,23 @@ impl EnumCase {
             class: class.into(),
             name: name.into(),
             value,
+            declaration: None,
         }
+    }
+
+    /// The cases of `enum $class { case ...; }`, in declaration order, each
+    /// knowing the others.
+    pub fn declare(class: &str, cases: &[(String, Option<Value>)]) -> Vec<Self> {
+        let declaration: Arc<EnumDeclaration> = cases.to_vec().into();
+        cases
+            .iter()
+            .map(|(name, value)| Self {
+                class: class.to_owned(),
+                name: name.clone(),
+                value: value.clone(),
+                declaration: Some(declaration.clone()),
+            })
+            .collect()
     }
 
     pub fn name(&self) -> &str {
@@ -326,6 +352,17 @@ impl EnumCase {
 
     pub fn object(self) -> Object {
         Arc::new(self)
+    }
+
+    /// `$class::cases()`, when the declaration is known.
+    pub fn cases(&self) -> Option<Vec<Object>> {
+        let declaration = self.declaration.as_ref()?;
+        Some(
+            Self::declare(&self.class, declaration)
+                .into_iter()
+                .map(Self::object)
+                .collect(),
+        )
     }
 }
 
@@ -341,6 +378,50 @@ impl PhpObject for EnumCase {
             properties.insert("value", value.clone());
         }
         properties
+    }
+
+    fn instance_of(&self, class: &str) -> bool {
+        let class = class.trim_start_matches('\\');
+        class.eq_ignore_ascii_case(&self.class)
+            || class.eq_ignore_ascii_case("UnitEnum")
+            || (self.value.is_some() && class.eq_ignore_ascii_case("BackedEnum"))
+    }
+
+    fn methods(&self) -> Vec<String> {
+        match (&self.declaration, &self.value) {
+            (None, _) => Vec::new(),
+            (Some(_), None) => vec!["cases".to_owned()],
+            (Some(_), Some(_)) => ["cases", "from", "tryFrom"].map(str::to_owned).to_vec(),
+        }
+    }
+
+    fn call_method(&self, name: &str, arguments: &[Value]) -> Option<Result<Value, Thrown>> {
+        let cases = self.cases()?;
+        let method = name.to_ascii_lowercase();
+        if method == "cases" {
+            return Some(Ok(Value::Array(PhpArray::list(
+                cases.into_iter().map(Value::Object),
+            ))));
+        }
+        if self.value.is_none() || !matches!(method.as_str(), "from" | "tryfrom") {
+            return None;
+        }
+        let argument = arguments.first().cloned().unwrap_or(Value::Null);
+        let result = backed_enum_from(&self.class, &cases, &argument)?;
+        Some(match (method.as_str(), result) {
+            (_, Ok(case)) => Ok(Value::Object(case)),
+            ("tryfrom", Err(EnumFromError::ValueError(_))) => Ok(Value::Null),
+            ("tryfrom", Err(e)) => Err(Thrown::new(
+                e.class(),
+                PhpString::from(String::from_utf8_lossy(e.message().as_bytes()).replacen(
+                    "::from()",
+                    "::tryFrom()",
+                    1,
+                )),
+                0,
+            )),
+            (_, Err(e)) => Err(Thrown::new(e.class(), e.message(), 0)),
+        })
     }
 }
 

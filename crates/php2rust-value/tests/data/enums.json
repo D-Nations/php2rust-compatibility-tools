@@ -1,0 +1,329 @@
+{
+    "cases": [
+        {
+            "case": "Suit::Hearts",
+            "unit": true,
+            "backed": false,
+            "array": {
+                "name": "Hearts"
+            },
+            "cases": [
+                {
+                    "case": "Suit::Hearts"
+                },
+                {
+                    "case": "Suit::Spades"
+                }
+            ],
+            "calls": [
+                {
+                    "method": "from",
+                    "arg": "active",
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::from()"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": "nope",
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::from()"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 1,
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::from()"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 10,
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::from()"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": "10",
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::from()"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 2,
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::from()"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "active",
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::tryFrom()"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "nope",
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::tryFrom()"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 1,
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::tryFrom()"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 10,
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::tryFrom()"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "10",
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::tryFrom()"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 2,
+                    "result": {
+                        "class": "Error",
+                        "message": "Call to undefined method Suit::tryFrom()"
+                    }
+                }
+            ]
+        },
+        {
+            "case": "Status::Active",
+            "unit": true,
+            "backed": true,
+            "array": {
+                "name": "Active",
+                "value": "active"
+            },
+            "cases": [
+                {
+                    "case": "Status::Active"
+                },
+                {
+                    "case": "Status::Inactive"
+                }
+            ],
+            "calls": [
+                {
+                    "method": "from",
+                    "arg": "active",
+                    "result": {
+                        "case": "Status::Active"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": "nope",
+                    "result": {
+                        "class": "ValueError",
+                        "message": "\"nope\" is not a valid backing value for enum Status"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 1,
+                    "result": {
+                        "class": "ValueError",
+                        "message": "\"1\" is not a valid backing value for enum Status"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 10,
+                    "result": {
+                        "class": "ValueError",
+                        "message": "\"10\" is not a valid backing value for enum Status"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": "10",
+                    "result": {
+                        "class": "ValueError",
+                        "message": "\"10\" is not a valid backing value for enum Status"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 2,
+                    "result": {
+                        "class": "ValueError",
+                        "message": "\"2\" is not a valid backing value for enum Status"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "active",
+                    "result": {
+                        "case": "Status::Active"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "nope",
+                    "result": null
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 1,
+                    "result": null
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 10,
+                    "result": null
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "10",
+                    "result": null
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 2,
+                    "result": null
+                }
+            ]
+        },
+        {
+            "case": "Level::High",
+            "unit": true,
+            "backed": true,
+            "array": {
+                "name": "High",
+                "value": 10
+            },
+            "cases": [
+                {
+                    "case": "Level::Low"
+                },
+                {
+                    "case": "Level::High"
+                }
+            ],
+            "calls": [
+                {
+                    "method": "from",
+                    "arg": "active",
+                    "result": {
+                        "class": "TypeError",
+                        "message": "Level::from(): Argument #1 ($value) must be of type int, string given"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": "nope",
+                    "result": {
+                        "class": "TypeError",
+                        "message": "Level::from(): Argument #1 ($value) must be of type int, string given"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 1,
+                    "result": {
+                        "case": "Level::Low"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 10,
+                    "result": {
+                        "case": "Level::High"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": "10",
+                    "result": {
+                        "case": "Level::High"
+                    }
+                },
+                {
+                    "method": "from",
+                    "arg": 2,
+                    "result": {
+                        "class": "ValueError",
+                        "message": "2 is not a valid backing value for enum Level"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "active",
+                    "result": {
+                        "class": "TypeError",
+                        "message": "Level::tryFrom(): Argument #1 ($value) must be of type int, string given"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "nope",
+                    "result": {
+                        "class": "TypeError",
+                        "message": "Level::tryFrom(): Argument #1 ($value) must be of type int, string given"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 1,
+                    "result": {
+                        "case": "Level::Low"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 10,
+                    "result": {
+                        "case": "Level::High"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": "10",
+                    "result": {
+                        "case": "Level::High"
+                    }
+                },
+                {
+                    "method": "tryFrom",
+                    "arg": 2,
+                    "result": null
+                }
+            ]
+        }
+    ],
+    "enum_exists": {
+        "Suit": true,
+        "suit": true,
+        "Nope": false,
+        "Nothing": true
+    },
+    "empty_cases": []
+}

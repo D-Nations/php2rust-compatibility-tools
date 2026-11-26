@@ -60,6 +60,13 @@ pub trait PhpObject: Any + Send + Sync + fmt::Debug {
         None
     }
 
+    /// The parameters of the public method `name`, for calls with named
+    /// arguments ([`crate::args::bind`]); `None` when they are not known.
+    fn method_parameters(&self, name: &str) -> Option<Vec<crate::args::Parameter>> {
+        let _ = name;
+        None
+    }
+
     /// `$object->$name` for a property readable from outside the class
     /// (`isset()` semantics: a null property reads as unset); `None` when
     /// there is none.

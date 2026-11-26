@@ -6,6 +6,7 @@
 #   scripts/record.sh value-decode crates/php2rust-value/tests/data/{html_entity_decode,json_decode}.json
 #   scripts/record.sh value-json   crates/php2rust-value/tests/data/json_encode.json
 #   scripts/record.sh value-dates  crates/php2rust-value/tests/data/dates.json
+#   scripts/record.sh value-args   crates/php2rust-value/tests/data/named_args.json
 #   scripts/record.sh dom          crates/php2rust-dom/tests/data/parse.json
 #   scripts/record.sh dom-schema   crates/php2rust-dom/tests/data/schema.json
 #   scripts/record.sh all          all of the above
@@ -51,6 +52,10 @@ value_decode() {
     record oracle php_value_json_decode.php "$value_dir/json_decode.json" 'len(d), "json_decode() cases"'
 }
 
+value_args() {
+    record oracle php_value_named_args.php "$value_dir/named_args.json" 'len(d), "argument bindings"'
+}
+
 value_json() {
     record oracle php_value_json.php "$value_dir/json_encode.json" 'len(d["encode"]), "json_encode() calls,", len(d["decode"]), "json_decode() calls"'
 }
@@ -72,8 +77,9 @@ case "${1:-}" in
     value-decode) value_decode ;;
     value-json) value_json ;;
     value-dates) value_dates ;;
+    value-args) value_args ;;
     dom) dom ;;
     dom-schema) dom_schema ;;
-    all) value; value_decode; value_json; value_dates; dom; dom_schema ;;
-    *) echo "usage: scripts/record.sh value|value-decode|value-json|value-dates|dom|dom-schema|all" >&2; exit 2 ;;
+    all) value; value_decode; value_json; value_dates; value_args; dom; dom_schema ;;
+    *) echo "usage: scripts/record.sh value|value-decode|value-json|value-dates|value-args|dom|dom-schema|all" >&2; exit 2 ;;
 esac

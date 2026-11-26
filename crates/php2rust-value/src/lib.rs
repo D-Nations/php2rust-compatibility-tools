@@ -8,6 +8,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod args;
 pub mod array;
 pub mod base64;
 pub mod bcmath;

@@ -2,6 +2,7 @@ MIT License
 
 Copyright (c) 2026 php2rust-compatibility-tools contributors
 Portions moved from symfony-rs, copyright (c) 2026 symfony-rs contributors
+Portions moved from php2rust (php2rust-runtime), copyright (c) 2026 Daniel Nations
 Portions derived from Symfony, copyright (c) 2004-present Fabien Potencier
 Portions derived from symfony/demo, copyright (c) 2015-present Fabien Potencier
 

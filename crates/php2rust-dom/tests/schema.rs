@@ -213,7 +213,10 @@ fn unsupported_schema_constructs_are_refused() {
     ] {
         let reason = refusal(&xs(body));
         assert!(
-            matches!(reason, php2rust_dom::RefusalReason::UnsupportedSchema { .. }),
+            matches!(
+                reason,
+                php2rust_dom::RefusalReason::UnsupportedSchema { .. }
+            ),
             "{body}: {reason:?}"
         );
     }

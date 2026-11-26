@@ -75,9 +75,9 @@ fn prepare(value: Value) -> Value {
                 Value::Object(Arc::new(SerializableThrows(object.properties())))
             }
             StdClass::CLASS => StdClass::object(map(&object.properties())),
-            "ArrayObject" => Value::Object(Arc::new(php2rust_value::object::ArrayObject::new(map(
-                &object.properties(),
-            )))),
+            "ArrayObject" => Value::Object(Arc::new(php2rust_value::object::ArrayObject::new(
+                map(&object.properties()),
+            ))),
             _ => Value::Object(object),
         },
         other => other,

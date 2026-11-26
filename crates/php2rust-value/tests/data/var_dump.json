@@ -1,0 +1,623 @@
+{
+    "cases": [
+        {
+            "args": [
+                [
+                    "null"
+                ]
+            ],
+            "out": "TlVMTAo="
+        },
+        {
+            "args": [
+                [
+                    "bool",
+                    true
+                ]
+            ],
+            "out": "Ym9vbCh0cnVlKQo="
+        },
+        {
+            "args": [
+                [
+                    "bool",
+                    false
+                ]
+            ],
+            "out": "Ym9vbChmYWxzZSkK"
+        },
+        {
+            "args": [
+                [
+                    "int",
+                    0
+                ]
+            ],
+            "out": "aW50KDApCg=="
+        },
+        {
+            "args": [
+                [
+                    "int",
+                    1
+                ]
+            ],
+            "out": "aW50KDEpCg=="
+        },
+        {
+            "args": [
+                [
+                    "int",
+                    -1
+                ]
+            ],
+            "out": "aW50KC0xKQo="
+        },
+        {
+            "args": [
+                [
+                    "int",
+                    9223372036854775807
+                ]
+            ],
+            "out": "aW50KDkyMjMzNzIwMzY4NTQ3NzU4MDcpCg=="
+        },
+        {
+            "args": [
+                [
+                    "int",
+                    -9223372036854775808
+                ]
+            ],
+            "out": "aW50KC05MjIzMzcyMDM2ODU0Nzc1ODA4KQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "0000000000000000"
+                ]
+            ],
+            "out": "ZmxvYXQoMCkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "8000000000000000"
+                ]
+            ],
+            "out": "ZmxvYXQoLTApCg=="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "3ff0000000000000"
+                ]
+            ],
+            "out": "ZmxvYXQoMSkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "bff8000000000000"
+                ]
+            ],
+            "out": "ZmxvYXQoLTEuNSkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "3fb999999999999a"
+                ]
+            ],
+            "out": "ZmxvYXQoMC4xKQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "3fb9999999999998"
+                ]
+            ],
+            "out": "ZmxvYXQoMC4wOTk5OTk5OTk5OTk5OTk5OCkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "430c6bf526340000"
+                ]
+            ],
+            "out": "ZmxvYXQoMTAwMDAwMDAwMDAwMDAwMCkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "4341c37937e08000"
+                ]
+            ],
+            "out": "ZmxvYXQoMTAwMDAwMDAwMDAwMDAwMDApCg=="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "4415af1d78b58c40"
+                ]
+            ],
+            "out": "ZmxvYXQoMS4wRSsyMCkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "444b1ae4d6e2ef50"
+                ]
+            ],
+            "out": "ZmxvYXQoMS4wRSsyMSkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "45208b2a2c280291"
+                ]
+            ],
+            "out": "ZmxvYXQoMS4wRSsyNSkK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "3eef75104d551d69"
+                ]
+            ],
+            "out": "ZmxvYXQoMS41RS01KQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "3f1a36e2eb1c432d"
+                ]
+            ],
+            "out": "ZmxvYXQoMC4wMDAxKQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "3f202c9dedbc309d"
+                ]
+            ],
+            "out": "ZmxvYXQoMC4wMDAxMjM0KQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "42dc12218377de6b"
+                ]
+            ],
+            "out": "ZmxvYXQoMTIzNDU2Nzg5MDEyMzQ1LjY3KQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "7ff0000000000000"
+                ]
+            ],
+            "out": "ZmxvYXQoSU5GKQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "fff0000000000000"
+                ]
+            ],
+            "out": "ZmxvYXQoLUlORikK"
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "7ff8000000000000"
+                ]
+            ],
+            "out": "ZmxvYXQoTkFOKQo="
+        },
+        {
+            "args": [
+                [
+                    "float",
+                    "400921fb54442d18"
+                ]
+            ],
+            "out": "ZmxvYXQoMy4xNDE1OTI2NTM1ODk3OTMpCg=="
+        },
+        {
+            "args": [
+                [
+                    "string",
+                    ""
+                ]
+            ],
+            "out": "c3RyaW5nKDApICIiCg=="
+        },
+        {
+            "args": [
+                [
+                    "string",
+                    "Zm9v"
+                ]
+            ],
+            "out": "c3RyaW5nKDMpICJmb28iCg=="
+        },
+        {
+            "args": [
+                [
+                    "string",
+                    "YSJi"
+                ]
+            ],
+            "out": "c3RyaW5nKDMpICJhImIiCg=="
+        },
+        {
+            "args": [
+                [
+                    "string",
+                    "bXVsdGkKbGluZQ=="
+                ]
+            ],
+            "out": "c3RyaW5nKDEwKSAibXVsdGkKbGluZSIK"
+        },
+        {
+            "args": [
+                [
+                    "string",
+                    "AP8="
+                ]
+            ],
+            "out": "c3RyaW5nKDIpICIA/yIK"
+        },
+        {
+            "args": [
+                [
+                    "string",
+                    "w6l0w6k="
+                ]
+            ],
+            "out": "c3RyaW5nKDUpICLDqXTDqSIK"
+        },
+        {
+            "args": [
+                [
+                    "array",
+                    []
+                ]
+            ],
+            "out": "YXJyYXkoMCkgewp9Cg=="
+        },
+        {
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            [
+                                "int",
+                                0
+                            ],
+                            [
+                                "int",
+                                1
+                            ]
+                        ],
+                        [
+                            [
+                                "int",
+                                1
+                            ],
+                            [
+                                "int",
+                                2
+                            ]
+                        ],
+                        [
+                            [
+                                "int",
+                                2
+                            ],
+                            [
+                                "int",
+                                3
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "out": "YXJyYXkoMykgewogIFswXT0+CiAgaW50KDEpCiAgWzFdPT4KICBpbnQoMikKICBbMl09PgogIGludCgzKQp9Cg=="
+        },
+        {
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            [
+                                "string",
+                                "Zm9v"
+                            ],
+                            [
+                                "string",
+                                "Zm9v"
+                            ]
+                        ],
+                        [
+                            [
+                                "string",
+                                "YmFy"
+                            ],
+                            [
+                                "string",
+                                "YmFy"
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "out": "YXJyYXkoMikgewogIFsiZm9vIl09PgogIHN0cmluZygzKSAiZm9vIgogIFsiYmFyIl09PgogIHN0cmluZygzKSAiYmFyIgp9Cg=="
+        },
+        {
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            [
+                                "int",
+                                5
+                            ],
+                            [
+                                "string",
+                                "YQ=="
+                            ]
+                        ],
+                        [
+                            [
+                                "string",
+                                "aw=="
+                            ],
+                            [
+                                "array",
+                                [
+                                    [
+                                        [
+                                            "int",
+                                            0
+                                        ],
+                                        [
+                                            "int",
+                                            1
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            "int",
+                                            1
+                                        ],
+                                        [
+                                            "array",
+                                            [
+                                                [
+                                                    [
+                                                        "string",
+                                                        "eA=="
+                                                    ],
+                                                    [
+                                                        "null"
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                        [
+                            [
+                                "int",
+                                -3
+                            ],
+                            [
+                                "bool",
+                                true
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "out": "YXJyYXkoMykgewogIFs1XT0+CiAgc3RyaW5nKDEpICJhIgogIFsiayJdPT4KICBhcnJheSgyKSB7CiAgICBbMF09PgogICAgaW50KDEpCiAgICBbMV09PgogICAgYXJyYXkoMSkgewogICAgICBbIngiXT0+CiAgICAgIE5VTEwKICAgIH0KICB9CiAgWy0zXT0+CiAgYm9vbCh0cnVlKQp9Cg=="
+        },
+        {
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            [
+                                "int",
+                                0
+                            ],
+                            [
+                                "array",
+                                []
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "out": "YXJyYXkoMSkgewogIFswXT0+CiAgYXJyYXkoMCkgewogIH0KfQo="
+        },
+        {
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            [
+                                "string",
+                                "YQ=="
+                            ],
+                            [
+                                "array",
+                                []
+                            ]
+                        ],
+                        [
+                            [
+                                "string",
+                                "Yg=="
+                            ],
+                            [
+                                "array",
+                                [
+                                    [
+                                        [
+                                            "int",
+                                            0
+                                        ],
+                                        [
+                                            "array",
+                                            [
+                                                [
+                                                    [
+                                                        "int",
+                                                        0
+                                                    ],
+                                                    [
+                                                        "array",
+                                                        [
+                                                            [
+                                                                [
+                                                                    "int",
+                                                                    0
+                                                                ],
+                                                                [
+                                                                    "float",
+                                                                    "3ff8000000000000"
+                                                                ]
+                                                            ]
+                                                        ]
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "out": "YXJyYXkoMikgewogIFsiYSJdPT4KICBhcnJheSgwKSB7CiAgfQogIFsiYiJdPT4KICBhcnJheSgxKSB7CiAgICBbMF09PgogICAgYXJyYXkoMSkgewogICAgICBbMF09PgogICAgICBhcnJheSgxKSB7CiAgICAgICAgWzBdPT4KICAgICAgICBmbG9hdCgxLjUpCiAgICAgIH0KICAgIH0KICB9Cn0K"
+        },
+        {
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            [
+                                "string",
+                                "InF1b3RlZCI="
+                            ],
+                            [
+                                "int",
+                                1
+                            ]
+                        ],
+                        [
+                            [
+                                "string",
+                                ""
+                            ],
+                            [
+                                "int",
+                                2
+                            ]
+                        ],
+                        [
+                            [
+                                "int",
+                                12
+                            ],
+                            [
+                                "int",
+                                3
+                            ]
+                        ],
+                        [
+                            [
+                                "string",
+                                "MDEy"
+                            ],
+                            [
+                                "int",
+                                4
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "out": "YXJyYXkoNCkgewogIFsiInF1b3RlZCIiXT0+CiAgaW50KDEpCiAgWyIiXT0+CiAgaW50KDIpCiAgWzEyXT0+CiAgaW50KDMpCiAgWyIwMTIiXT0+CiAgaW50KDQpCn0K"
+        },
+        {
+            "args": [
+                [
+                    "string",
+                    "Zm9v"
+                ],
+                [
+                    "string",
+                    "YmFy"
+                ]
+            ],
+            "out": "c3RyaW5nKDMpICJmb28iCnN0cmluZygzKSAiYmFyIgo="
+        },
+        {
+            "args": [
+                [
+                    "int",
+                    1
+                ],
+                [
+                    "array",
+                    [
+                        [
+                            [
+                                "int",
+                                0
+                            ],
+                            [
+                                "int",
+                                2
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "null"
+                ]
+            ],
+            "out": "aW50KDEpCmFycmF5KDEpIHsKICBbMF09PgogIGludCgyKQp9Ck5VTEwK"
+        }
+    ]
+}

@@ -325,6 +325,20 @@ pub fn var_export_float(value: f64) -> String {
     out
 }
 
+/// A float in `var_dump()` (`serialize_precision = -1`): the shortest
+/// digits, exponent form (`1.0E+20`, `1.5E-5`) as in `var_export()`, but
+/// no `.0` added to a whole number (`float(1)`, `float(-0)`).
+pub fn var_dump_float(value: f64) -> String {
+    if let Some(s) = special(value) {
+        return s.to_owned();
+    }
+    if value == 0.0 {
+        return if value.is_sign_negative() { "-0" } else { "0" }.to_owned();
+    }
+    let (digits, exponent) = decimal_digits(value, None);
+    layout(value, &digits, exponent, 17, 'E')
+}
+
 /// `json_encode($float)` for a finite float (INF and NaN fail in PHP).
 pub fn json_float(value: f64) -> Option<String> {
     if special(value).is_some() {

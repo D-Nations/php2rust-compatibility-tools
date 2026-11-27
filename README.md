@@ -32,14 +32,14 @@ change. Use a git dependency pinned to a commit:
 
 ```toml
 [dependencies]
-php2rust-value = { git = "https://github.com/php2rust/compatibility-tools-rs", rev = "<commit>" }
+php2rust-value = { git = "https://github.com/php2rust/compatibility-tools", rev = "<commit>" }
 ```
 
 To work on this repository and a user of it at the same time, override the
 git source in the user's (uncommitted) `.cargo/config.toml`:
 
 ```toml
-[patch."https://github.com/php2rust/compatibility-tools-rs"]
+[patch."https://github.com/php2rust/compatibility-tools"]
 php2rust-value = { path = "../php2rust-compatibility-tools/crates/php2rust-value" }
 ```
 

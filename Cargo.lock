@@ -150,6 +150,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "php2rust-deprecation-contracts"
+version = "0.1.0"
+
+[[package]]
 name = "php2rust-dom"
 version = "0.1.0"
 dependencies = [

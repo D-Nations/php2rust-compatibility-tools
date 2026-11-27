@@ -6,6 +6,7 @@ members = [
     "crates/php2rust-date",
     "crates/php2rust-iconv",
     "crates/php2rust-runtime",
+    "crates/php2rust-deprecation-contracts",
 ]
 resolver = "3"
 

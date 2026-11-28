@@ -114,5 +114,5 @@ fn cases_match_php() {
 fn case_without_declaration_has_no_static_methods() {
     let case = EnumCase::new("Suit", "Hearts", None);
     assert!(case.call_method("cases", &[]).is_none());
-    assert!(case.methods().is_empty());
+    assert_eq!(case.methods(), [] as [std::string::String; 0]);
 }

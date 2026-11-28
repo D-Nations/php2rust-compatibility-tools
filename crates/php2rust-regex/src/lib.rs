@@ -904,7 +904,7 @@ impl Translator<'_> {
             b'Q' => {
                 let rest = &self.p[self.pos..];
                 let end = rest
-                    .windows(2)
+                    .array_windows()
                     .position(|w| w == b"\\E")
                     .unwrap_or(rest.len());
                 let stop = self.pos + end;
@@ -1343,7 +1343,9 @@ impl Translator<'_> {
                 // a POSIX class needs its terminator before the class ends
                 let rest = &self.p[self.pos + 2..];
                 let end = rest.iter().position(|&c| c == b']');
-                let term = rest.windows(2).position(|w| w[0] == next && w[1] == b']');
+                let term = rest
+                    .array_windows()
+                    .position(|&[first, second]| first == next && second == b']');
                 if let Some(t) = term.filter(|&t| end.is_none_or(|e| t < e)) {
                     if next != b':' {
                         return compile_err("POSIX collating elements are not supported");

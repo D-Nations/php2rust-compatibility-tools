@@ -424,9 +424,7 @@ fn encode(charset: Charset, chars: &[char]) -> Result<Vec<u8>, Error> {
             u8::try_from(u32::from(c)).ok().filter(|b| *b < 0x80)
         })?,
         Charset::Latin1 => encode_single(chars, &mut out, |c| u8::try_from(u32::from(c)).ok())?,
-        Charset::Latin9 => encode_single(chars, &mut out, |c| {
-            (0..=255).find(|&b| latin9(b) == c)
-        })?,
+        Charset::Latin9 => encode_single(chars, &mut out, |c| (0..=255).find(|&b| latin9(b) == c))?,
         Charset::Cp1252 => encode_single(chars, &mut out, |c| {
             (0..=255).find(|&b| cp1252(b) == Some(c))
         })?,

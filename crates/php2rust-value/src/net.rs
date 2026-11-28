@@ -91,7 +91,7 @@ fn groups(s: &[u8], ipv4_tail: bool) -> Option<Vec<u16>> {
 
 /// An IPv6 address in text form, as all three functions read it.
 pub fn parse_ipv6(s: &[u8]) -> Option<[u8; 16]> {
-    let words = if let Some(at) = s.windows(2).position(|w| w == b"::") {
+    let words = if let Some(at) = s.array_windows().position(|w| w == b"::") {
         let (left, right) = (&s[..at], &s[at + 2..]);
         let left = groups(left, false)?;
         let right = groups(right, true)?;

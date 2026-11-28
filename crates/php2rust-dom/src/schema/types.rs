@@ -318,9 +318,9 @@ impl Schema {
                             return Ok(None);
                         }
                     }
-                    let value = integer(&norm).map(|(_, d)| d).unwrap_or_default();
+                    let value = integer(&norm).map_or_default(|(_, d)| d);
                     if let Some(min) = &facets.min_inclusive {
-                        let m = integer(min).map(|(_, d)| d).unwrap_or_default();
+                        let m = integer(min).map_or_default(|(_, d)| d);
                         if cmp_digits(&value, &m).is_lt() {
                             if let Some(e) = errors {
                                 e.push((
@@ -334,7 +334,7 @@ impl Schema {
                         }
                     }
                     if let Some(max) = &facets.max_inclusive {
-                        let m = integer(max).map(|(_, d)| d).unwrap_or_default();
+                        let m = integer(max).map_or_default(|(_, d)| d);
                         if cmp_digits(&value, &m).is_gt() {
                             if let Some(e) = errors {
                                 e.push((

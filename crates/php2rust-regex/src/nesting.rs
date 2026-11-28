@@ -115,7 +115,9 @@ impl Parser<'_> {
                     return Some(());
                 }
                 b'[' if self.p.get(self.pos + 1) == Some(&b':') => {
-                    let close = self.p[self.pos..].windows(2).position(|w| w == b":]")?;
+                    let close = self.p[self.pos..]
+                        .array_windows()
+                        .position(|w| w == b":]")?;
                     self.pos += close + 2;
                 }
                 _ => self.pos += 1,

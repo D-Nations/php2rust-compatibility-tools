@@ -244,7 +244,7 @@ mod tests {
     fn normalizes_keys(#[case] bytes: &[u8], #[case] int: Option<i64>) {
         match int {
             Some(n) => assert_eq!(Key::from_bytes(bytes), Key::Int(n)),
-            None => assert!(matches!(Key::from_bytes(bytes), Key::Str(_))),
+            None => std::assert_matches!(Key::from_bytes(bytes), Key::Str(_)),
         }
     }
 

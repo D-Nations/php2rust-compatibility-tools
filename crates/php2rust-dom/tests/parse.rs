@@ -161,37 +161,32 @@ fn dump_node(doc: &Document, id: NodeId, depth: usize, out: &mut Vec<Value>) {
 /// The recorded tree with what this crate does not claim removed: a
 /// document type's `internalSubset` (libxml's re-serialisation).
 fn expected_tree(tree: &Value) -> Vec<Value> {
-    tree.as_array()
-        .map(|rows| {
-            rows.iter()
-                .map(|r| {
-                    let mut r = r.as_array().cloned().unwrap_or_default();
-                    if r.get(1).and_then(Value::as_str) == Some("D") {
-                        r.truncate(5);
-                    }
-                    Value::Array(r)
-                })
-                .collect()
-        })
-        .unwrap_or_default()
+    tree.as_array().map_or_default(|rows| {
+        rows.iter()
+            .map(|r| {
+                let mut r = r.as_array().cloned().unwrap_or_default();
+                if r.get(1).and_then(Value::as_str) == Some("D") {
+                    r.truncate(5);
+                }
+                Value::Array(r)
+            })
+            .collect()
+    })
 }
 
 /// Validity errors (5xx) and I/O warnings (15xx) for documents with a
 /// document type: DTD validation is not modelled (`XmlUtils` rejects every
 /// document type anyway).
 fn claimed_errors(errors: &Value, has_doctype: bool) -> Vec<Value> {
-    errors
-        .as_array()
-        .map(|es| {
-            es.iter()
-                .filter(|e| {
-                    let code = e[1].as_u64().unwrap_or(0);
-                    !(has_doctype && ((500..600).contains(&code) || (1500..1600).contains(&code)))
-                })
-                .cloned()
-                .collect()
-        })
-        .unwrap_or_default()
+    errors.as_array().map_or_default(|es| {
+        es.iter()
+            .filter(|e| {
+                let code = e[1].as_u64().unwrap_or(0);
+                !(has_doctype && ((500..600).contains(&code) || (1500..1600).contains(&code)))
+            })
+            .cloned()
+            .collect()
+    })
 }
 
 fn compare(
